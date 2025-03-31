@@ -8,119 +8,33 @@ class HttpService {
       data,
     });
   }
-  register(data) {
-    // 注册
-    return http("/api/user/register", {
-      method: "post",
-      data,
-    });
-  }
   index() {
     // 首页
-    return http("/api/index/index", {
+    return http("/api/index/index?site_id=1", {
       method: "get",
     });
   }
-  userConfig() {
-    // 获取个人信息
-    return http("/api/user/index", {
+  indexAd() {
+    // 广告
+    return http("/api/index/ad?site_id=1&cid=", {
       method: "get",
     });
   }
-  logout(data) {
-    // 退出登录
-    return http("/api/user/logout", {
-      method: "post",
-      data,
-    });
-  }
-  changepwd(data) {
-    // 修改密码
-    return http("/api/user/changepwd", {
-      method: "post",
-      data,
-    });
-  }
-  changefundpwd(data) {
-    // 修改资金密码
-    return http("/api/user/changefundpwd", {
-      method: "post",
-      data,
-    });
-  }
-  recharge(data) {
-    // 充值
-    return http("/api/recharge/recharge?amount=" + data.amount, {
+  category() {
+    // 视频分类
+    return http("/api/index/category", {
       method: "get",
     });
   }
-  band_bank(data) {
-    // 绑定银行卡
-    return http("/api/user/band_bank", {
-      method: "post",
-      data,
-    });
-  }
-  withdraw(data) {
-    // 提现
-    return http(`/api/withdraw/withdraw?amount=${data.amount}&fund_password=${data.fund_password}&image=${data.image}`, {
+  category_video(cid, page, limit) {
+    // 分类视频列表接口 
+    return http(`/api/index/category_video?cid=${cid}&page=${page}&limit=${limit}`, {
       method: "get",
     });
   }
-  withdraw_list(data) {
-    // 提现记录
-    return http(`/api/withdraw/withdraw_list?page=${data.page}`, {
-      method: "get",
-    });
-  }
-  recharge_list(data) {
-    // 充值记录
-    return http(`/api/recharge/recharge_list?page=${data.page}`, {
-      method: "get",
-    });
-  }
-  user_money_log(data) {
-    // 账变记录
-    return http(`/api/index/user_money_log?page=${data.page}`, {
-      method: "get",
-    });
-  }
-  betting_list(data) {
-    // 订单记录
-    return http(`/api/game/betting_list?page=${data.page}&status=${data.status}`, {
-      method: "get",
-    });
-  }
-  report(data) {
-    // 报告
-    return http(`/api/index/report?start_time=${data.start_time}&end_time=${data.end_time}`, {
-      method: "get",
-    });
-  }
-  betting(data) {
-    // 投注
-    return http(`/api/game/betting`, {
-      method: "post",
-      data
-    });
-  }
-  bank_list(data) {
-    // 银行列表
-    return http("/api/user/bank_list", {
-      method: "get",
-      data,
-    });
-  }
-  gameType(data) {
-    // 游戏类型
-    return http("/api/game/type", {
-      method: "get",
-      data,
-    });
-  }
-  result_list(data) {
-    // 开奖记录
-    return http(`/api/game/result_list?game_type_id=${data.game_type_id}&page=${data.page}`, {
+  search_video(cid, page, limit) {
+    // 搜索视频接口 
+    return http(`/api/index/search_video?cid=${cid}&page=${page}&limit=${limit}`, {
       method: "get",
     });
   }

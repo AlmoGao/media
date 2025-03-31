@@ -19,7 +19,7 @@ module.exports = defineConfig({
   devServer: {
     proxy: {
       "/api": {
-        target: "https://bgtadmin.top/",
+        target: "https://seoadmin.top/",
         changeOrigin: true,
         logLevel: "debug",
       },

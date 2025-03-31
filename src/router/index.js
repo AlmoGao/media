@@ -8,6 +8,21 @@ const routes = [
     component: Home,
   },
   {
+    path: '/movies',
+    name: 'movies',
+    component: () => import("../views/Movie/Movie.vue"),
+  },
+  {
+    path: '/gift',
+    name: 'gift',
+    component: () => import("../views/Gift/Gift.vue"),
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: () => import("../views/Search/Search.vue"),
+  },
+  {
     // 找不到路由时
     path: '/:pathMatch(.*)*',
     redirect: '/',
@@ -17,6 +32,12 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes
+})
+
+router.afterEach(() => {
+  try {
+    document.querySelector('#app').scrollTo(0, 0)
+  } catch {}
 })
 
 export default router
