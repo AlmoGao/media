@@ -4,7 +4,7 @@
         <!-- pc -->
         <div class="con-header-pc">
             <div class="maxwidth con-pc">
-                <img class="logo" :src="site.logo_image" alt="">
+                <img @click="jump('home')" class="logo" :src="site.logo_image" alt="">
                 <div style="flex: 1;"></div>
                 <div class="navs">
                     <div class="nav" @click="jump(item.route)" :class="{ 'active_nav': route.name == item.route }" v-for="(item, i) in navs"
@@ -42,7 +42,6 @@ import { useRoute } from "vue-router"
 import router from "@/router"
 import store from "@/store"
 
-
 const site = computed(() => store.state.config.site || {})
 
 const route = useRoute()
@@ -57,6 +56,7 @@ const navs = ref([
 
 const jump = name => {
     active.value = false
+    if (route.name == name) return
     router.push({
         name
     })
@@ -76,6 +76,7 @@ const jump = name => {
         width: 60px;
         height: auto;
         margin-bottom: 48px;
+        cursor: pointer;
     }
 
     .navs {
@@ -174,6 +175,7 @@ const jump = name => {
                 .logo {
                     height: 68px;
                     width: auto;
+                    cursor: pointer;
                 }
 
                 .navs {

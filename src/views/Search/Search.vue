@@ -11,6 +11,12 @@
             </div>
         </NSpin>
 
+        <!-- 文字 -->
+        <div class="maxwidth ad-texts" v-if="ads.tad && ads.tad.length">
+            <div @click="openAd('tad', item)" class="gradient-text ad-text" v-for="item in ads.tad || []"
+                :key="'ad' + item.id">{{ item.title }}</div>
+        </div>
+
         <!-- banner -->
         <div v-if="ads.banner && ads.banner.length" class="maxwidth" style="margin: 0 auto">
             <img @click="openAd('banner', item)" style="width:100%;height:auto;display: block;cursor: pointer;"
@@ -18,7 +24,7 @@
         </div>
 
         <div class="maxwidth result-box" style="margin: 0 auto">
-            <ConList @more="getList" :list="list" :loading="loading" :finish="finish" />
+            <ConList :midApps="midApps" @more="getList" :list="list" :loading="loading" :finish="finish" />
         </div>
 
         <!-- 右侧广告 -->
@@ -32,7 +38,7 @@ import ConAdRight from "@/components/ConAdRight.vue"
 import { NSpin } from "naive-ui"
 import ConList from "@/components/ConList.vue"
 import https from '@/api';
-import { ref, computed  } from "vue"
+import { ref, computed } from "vue"
 import store from "@/store";
 
 store.dispatch('updateAds', 4)
@@ -40,6 +46,13 @@ const ads = computed(() => store.state.ads[4] || {})
 const rightApps = computed(() => { // 右侧广告
     if (!ads.value || !ads.value.app || !ads.value.app.length) return []
     return ads.value.app.filter(item => item.flag == 1) || []
+})
+const midApps = computed(() => { // 中间广告
+  if (!ads.value || !ads.value.app || !ads.value.app.length) return []
+  return (ads.value.app.filter(item => item.flag == 0) || []).map(item => {
+    item.type = 'ad'
+    return item
+  })
 })
 const openAd = (type, item) => {
     store.commit('openad', {
@@ -50,12 +63,18 @@ const openAd = (type, item) => {
 
 
 
-const keyWord = ref('')
+const keyWord = ref(sessionStorage.getItem('search_word') || '')
 
 const loading = ref(false)
-const page = ref(0)
+const page = ref(sessionStorage.getItem('search_page') || 0)
 const finish = ref(false)
 const list = ref([])
+try {
+    list.value = JSON.parse(sessionStorage.getItem('search_list') || '[]')
+} catch {
+    list.value = []
+}
+
 const getList = () => {
     if (loading.value || finish.value || keyWord.value === '') return
     loading.value = true
@@ -65,6 +84,11 @@ const getList = () => {
         if (word !== keyWord.value) return
         if (!res || !res.length) return finish.value = true
         list.value.push(...res)
+
+        sessionStorage.setItem('search_page', page.value)
+        sessionStorage.setItem('search_word', keyWord.value)
+        sessionStorage.setItem('search_list', JSON.stringify(list.value))
+
     }).finally(() => {
         if (word !== keyWord.value) return
         loading.value = false

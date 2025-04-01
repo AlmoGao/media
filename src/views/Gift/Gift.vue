@@ -25,11 +25,20 @@ const rightApps = computed(() => { // 右侧广告
     if (!ads.value || !ads.value.app || !ads.value.app.length) return []
     return ads.value.app.filter(item => item.flag == 1) || []
 })
+
+const openAd = (type, item) => {
+    store.commit('openad', {
+        type,
+        item
+    })
+}
 </script>
 
 <style lang="less" scoped>
 /* 默认样式 - 移动优先 (小于750px) */
 .page-gift {
+
+    padding-bottom: 50px;
 
     /* 移动设备样式 */
     .title {

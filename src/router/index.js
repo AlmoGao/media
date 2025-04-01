@@ -44,9 +44,17 @@ const router = createRouter({
   routes
 })
 
-router.afterEach(() => {
+router.afterEach((to, from) => {
   try {
-    document.querySelector('#app').scrollTo(0, 0)
+    if (['movies', 'search'].includes(to.name)) {
+      let n = sessionStorage.getItem(`scroll_${to.name}`)
+      document.querySelector('#app').scrollTo(0, 0)
+      setTimeout(() => {
+        document.querySelector('#app').scrollTo(0, n)
+      }, 300)
+    } else {
+      document.querySelector('#app').scrollTo(0, 0)
+    }
   } catch {}
 })
 

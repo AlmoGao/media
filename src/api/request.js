@@ -7,7 +7,8 @@ class Interceptors {
   instance;
   constructor() {
     this.instance = axios.create({
-      baseURL: '/',
+      // baseURL: '/',
+      baseURL: 'https://seoadmin.top',
       timeout: 20000,
     });
   }

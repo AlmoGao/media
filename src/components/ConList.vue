@@ -1,10 +1,22 @@
 <!-- 电影列表 -->
 <template>
   <div class="maxwidth con-list">
-    <div class="list-item" :class="{'ad-item': item.type == 'ad'}" v-for="item in list" :key="item.id" @click="goInfo(item)">
-      <img class="pic" :src="item.image" alt="">
-      <div class="title">{{ item.title }}</div>
-    </div>
+
+    <template v-for="(item, i) in list">
+      <div class="list-item" :class="{ 'ad-item': item.type == 'ad' }" @click="goInfo(item)">
+        <img class="pic" :src="item.image" alt="">
+        <div class="title">{{ item.title }}</div>
+      </div>
+
+      <!-- 广告 -->
+      <div class="list-ad-box" v-if="i % 24 == 0 && props.midApps.length">
+        <div @click="goAd(ad)" class="list-ad-box-item" v-for="ad in props.midApps" :key="ad.id">
+          <img class="list-ad-box-img" :src="ad.image" alt="">
+          <div class="list-ad-box-title">{{ ad.title }}</div>
+        </div>
+      </div>
+    </template>
+
 
     <div class="loading_more" ref="moreRef">{{ finish ? '没有更多了' : (loading ? '加载中...' : '') }}</div>
   </div>
@@ -30,18 +42,21 @@ const props = defineProps({
   scrollBox: {
     type: String,
     default: '#app'
-  }
+  },
+  midApps: {
+    type: Array,
+    default: () => []
+  },
 })
 const emits = defineEmits(['more'])
 const goInfo = item => {
-  if (item.type == 'ad') {
-    store.commit('openad', {
-      type: 'app',
-      item
-    })
-  } else {
-    store.commit('goVideoInfo', item)
-  }
+  store.commit('goVideoInfo', item)
+}
+const goAd = item => {
+  store.commit('openad', {
+    type: 'app',
+    item
+  })
 }
 
 const moreRef = ref()
@@ -49,7 +64,6 @@ const onScroll = e => {
   if (!moreRef.value) return
   if (isElementPartiallyInViewport(moreRef.value)) {
     if (!props.loading && !props.finish) {
-      console.error('加载更多')
       emits('more')
     }
   }
@@ -89,6 +103,30 @@ function isElementPartiallyInViewport(el) {
   align-items: stretch;
   justify-content: space-between;
 
+  .list-ad-box {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 2vw 0;
+
+    .list-ad-box-item {
+      width: 16vw;
+      cursor: pointer;
+
+      .list-ad-box-img {
+        width: 16vw;
+        height: 16vw;
+      }
+
+      .list-ad-box-title {
+        font-size: 3.5vw;
+        text-align: center;
+      }
+    }
+  }
+
   .list-item {
     cursor: pointer;
     width: 44vw;
@@ -124,6 +162,23 @@ function isElementPartiallyInViewport(el) {
     /* 平板样式 */
     padding: 2.5vw;
 
+    .list-ad-box {
+      padding: 24px 0;
+
+      .list-ad-box-item {
+        width: 12vw;
+
+        .list-ad-box-img {
+          width: 12vw;
+          height: 12vw;
+        }
+
+        .list-ad-box-title {
+          font-size: 24px;
+        }
+      }
+    }
+
     .list-item {
       width: 30vw;
 
@@ -150,6 +205,23 @@ function isElementPartiallyInViewport(el) {
   .con-list {
     /* 桌面样式 */
     padding: 32px 0;
+
+    .list-ad-box {
+      padding: 24px 0;
+
+      .list-ad-box-item {
+        width: 140px;
+
+        .list-ad-box-img {
+          width: 140px;
+          height: 140px;
+        }
+
+        .list-ad-box-title {
+          font-size: 24px;
+        }
+      }
+    }
 
     .list-item {
       width: 290px;

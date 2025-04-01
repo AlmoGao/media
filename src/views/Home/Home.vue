@@ -9,42 +9,79 @@
       <img class="logo" src="@/assets/home/index_app_video_logo.webp" alt="">
     </div>
 
+
+    <!-- 轮播图 -->
+    <div class="banner-box" v-if="ads.carousel && ads.carousel.length" style="background-color: #3b3b3b;">
+      <!-- h5 -->
+      <NCarousel autoplay touchable draggable class="banners-h5">
+        <img style="cursor: pointer;" @click="openAd('carousel', item)" v-for="item in ads.carousel"
+          :key="'b-' + item.id" class="carousel-img" :src="item.image">
+      </NCarousel>
+
+      <!-- pc -->
+      <NCarousel autoplay effect="card" class="banners" touchable draggable
+        prev-slide-style="transform: translateX(-110%) translateZ(-200px);"
+        next-slide-style="transform: translateX(10%) translateZ(-200px);">
+        <NCarouselItem :style="{ width: '80%' }" v-for="item in ads.carousel" :key="'pb-' + item.id">
+          <img style="cursor: pointer;" class="carousel-img" @click="openAd('carousel', item)" :src="item.image">
+        </NCarouselItem>
+      </NCarousel>
+    </div>
+
+    <!-- 文字 -->
+    <div class="maxwidth ad-texts" v-if="ads.tad && ads.tad.length">
+      <div @click="openAd('tad', item)" class="gradient-text ad-text" v-for="item in ads.tad || []"
+        :key="'ad' + item.id">{{ item.title }}</div>
+    </div>
+
     <!-- banner -->
     <div v-if="ads.banner && ads.banner.length" class="maxwidth" style="margin: 0 auto">
       <img @click="openAd('banner', item)" style="width:100%;height:auto;display: block;cursor: pointer;"
         v-for="item in ads.banner" :key="item.id" :src="item.image" alt="">
     </div>
 
-    <!-- 轮播 -->
-    <NCarousel v-if="ads.carousel && ads.carousel.length" autoplay touchable draggable class="banners">
-      <img style="cursor: pointer;" @click="openAd('carousel', item)" v-for="item in ads.carousel" :key="'b-' + item.id" class="banner" :src="item.image">
-    </NCarousel>
-
     <!-- 电影 -->
     <div class="maxwidth movies">
-      <div class="movie-title">
+      <div class="movie-title" @click="jump('movies')">
         <img class="movie-name" src="@/assets/home/our_movies_title.webp" alt="">
         <img class="btn" src="@/assets/home/more_icon.webp" alt="">
       </div>
     </div>
-    <n-carousel v-if="videos.length" touchable :show-dots="false" class="movie-list" :slides-per-view="3" :space-between="10" :loop="false" draggable>
-      <div class="movie-item" style="cursor: pointer;" @click="goInfo(item)" v-for="item in videos" :key="'b-' + item.id">
-        <img style="width: 100%;height: 100%"
-          :src="item.image" alt="">
+    <n-carousel v-if="videos.length" touchable :show-dots="false" class="movie-list" :slides-per-view="3"
+      :space-between="10" :loop="false" draggable>
+      <div class="movie-item" style="cursor: pointer;" @click="goInfo(item)" v-for="item in videos"
+        :key="'b-' + item.id">
+        <img style="width: 100%;height: 100%" :src="item.image" alt="">
       </div>
     </n-carousel>
 
     <!-- 合作 -->
     <div class="coop">
-      <div class="coop-title">
+      <div class="coop-title" @click="jump('gift')">
         <img class="coop-name" src="@/assets/home/app_our_partner_title.webp" alt="">
         <img class="btn" src="@/assets/home/partner_more_btn.webp" alt="">
       </div>
 
       <div class="coop-box">
-        <div class="coop-item" @click="openAd('app', item)" v-for="item in midApps" :key="item.id">
-          <img style="width: 100%;height:100%"
-            :src="item.image" alt="">
+        <div class="coop-line" ref="scroll1Ref">
+          <div class="coop-item" ref="app1Ref" @click="openAd('app', item)" v-for="item in midApps" :key="item.id">
+            <img style="width: 100%;height:100%" :src="item.image" alt="">
+          </div>
+        </div>
+        <div class="coop-line" ref="scroll2Ref">
+          <div class="coop-item" @click="openAd('app', item)" v-for="item in midApps" :key="item.id">
+            <img style="width: 100%;height:100%" :src="item.image" alt="">
+          </div>
+        </div>
+        <div class="coop-line" ref="scroll3Ref">
+          <div class="coop-item" @click="openAd('app', item)" v-for="item in midApps" :key="item.id">
+            <img style="width: 100%;height:100%" :src="item.image" alt="">
+          </div>
+        </div>
+        <div class="coop-line" ref="scroll4Ref">
+          <div class="coop-item" @click="openAd('app', item)" v-for="item in midApps" :key="item.id">
+            <img style="width: 100%;height:100%" :src="item.image" alt="">
+          </div>
         </div>
       </div>
     </div>
@@ -56,17 +93,18 @@
     </div>
 
 
-     <!-- 右侧广告 -->
-     <ConAdRight :list="rightApps" v-if="rightApps.length" />
+    <!-- 右侧广告 -->
+    <ConAdRight :list="rightApps" v-if="rightApps.length" />
   </div>
 </template>
 
 
 <script setup>
 import ConAdRight from "@/components/ConAdRight.vue"
-import { NCarousel } from 'naive-ui'
+import { NCarousel, NCarouselItem } from 'naive-ui'
 import store from '@/store';
-import { computed } from "vue"
+import { computed, onMounted, ref, onBeforeUnmount } from "vue"
+import router from "@/router";
 
 store.dispatch('updateAds', 1)
 const videos = computed(() => store.state.config.video || [])
@@ -93,6 +131,94 @@ const openAd = (type, item) => {
 const goInfo = item => {
   store.commit('goVideoInfo', item)
 }
+
+const jump = name => {
+  router.push({name})
+}
+
+
+// 推荐模块动画
+const scroll1Ref = ref()
+const scroll3Ref = ref()
+const scroll2Ref = ref()
+const scroll4Ref = ref()
+const app1Ref = ref([])
+let scrollInterval = null
+const startAni = () => {
+  if (app1Ref.value && app1Ref.value.length) {
+    let max = 0
+    app1Ref.value.forEach(item => {
+      max += item.clientWidth
+      max += 8
+    })
+    const step = 1
+    if (scroll1Ref.value) { // 1
+      scroll1Ref.value.scrollLeft = 0
+      scroll3Ref.value.scrollLeft = 0
+      let loading1 = false
+      let loading3 = false
+
+      scroll2Ref.value.scrollLeft = max
+      scroll4Ref.value.scrollLeft = max
+      let loading2 = false
+      let loading4 = false
+
+      
+      scrollInterval = setInterval(() => {
+        let b1 = scroll1Ref.value.scrollLeft
+        scroll1Ref.value.scrollLeft += step
+
+        let b3 = scroll3Ref.value.scrollLeft
+        scroll3Ref.value.scrollLeft += step
+
+        scroll2Ref.value.scrollLeft -= step
+
+        scroll4Ref.value.scrollLeft -= step
+
+        if (b1 == scroll1Ref.value.scrollLeft && !loading1) {
+          loading1 = true
+          setTimeout(() => {
+            scroll1Ref.value.scrollLeft = 0
+            loading1 = false
+          }, 3000)
+        }
+
+        if (b3 == scroll3Ref.value.scrollLeft && !loading3) {
+          loading3 = true
+          setTimeout(() => {
+            scroll3Ref.value.scrollLeft = 0
+            loading3 = false
+          }, 3000)
+        }
+
+        if (scroll2Ref.value.scrollLeft == 0 && !loading2) {
+          loading2 = true
+          setTimeout(() => {
+            scroll2Ref.value.scrollLeft = max
+            loading2 = false
+          }, 3000)
+        }
+
+        if (scroll4Ref.value.scrollLeft == 0 && !loading4) {
+          loading4 = true
+          setTimeout(() => {
+            scroll4Ref.value.scrollLeft = max
+            loading4 = false
+          }, 3000)
+        }
+      }, 1000 / 60)
+    }
+  }
+}
+
+onMounted(() => {
+  setTimeout(() => {
+    startAni()
+  }, midApps.value.length ? 1000 : 5000)
+})
+onBeforeUnmount(() => {
+  if (scrollInterval) clearInterval(scrollInterval)
+})
 </script>
 
 <style lang="less" scoped>
@@ -118,10 +244,16 @@ const goInfo = item => {
   }
 
   .banners {
-    .banner {
+    display: none;
+  }
+
+  .banners-h5 {
+    display: block;
+    height: 60vw;
+
+    .carousel-img {
       width: 100%;
-      height: 40vw;
-      cursor: pointer;
+      height: 60vw;
     }
   }
 
@@ -184,10 +316,6 @@ const goInfo = item => {
 
     .coop-box {
       width: 100%;
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      flex-wrap: wrap;
       position: relative;
 
       &::after {
@@ -210,10 +338,22 @@ const goInfo = item => {
         background-image: linear-gradient(to left, #fff, rgba(238, 238, 238, 0));
       }
 
+      .coop-line {
+        white-space: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+          width: 0;
+          height: 0;
+        }
+      }
+
       .coop-item {
+        display: inline-block;
         width: 18vw;
         height: 18vw;
-        margin-bottom: 1vw;
+        margin-right: 8px;
         cursor: pointer;
       }
     }
@@ -223,6 +363,30 @@ const goInfo = item => {
 /* 平板设备 (750px及以上) */
 @media (min-width: 750px) {
   .page-home {
+
+
+    .banner-box {
+      padding: 32px 0;
+    }
+
+    .banners-h5 {
+      display: none;
+    }
+
+    .banner-box {
+      padding: 32px 0;
+    }
+
+    .banners {
+      height: 360px;
+      display: block;
+
+      .carousel-img {
+        height: 360px;
+        width: auto;
+        margin: 0 auto;
+      }
+    }
 
     /* 平板样式 */
     .top {
@@ -281,9 +445,9 @@ const goInfo = item => {
         }
 
         .coop-item {
-          width: 18vw;
-          height: 18vw;
-          margin-bottom: 2vw;
+          width: 12vw;
+          height: 12vw;
+          margin-right: 8px;
         }
       }
     }
@@ -293,6 +457,29 @@ const goInfo = item => {
 /* 桌面设备 (1200px及以上) */
 @media (min-width: 1200px) {
   .page-home {
+
+    .banner-box {
+      padding: 64px 0;
+    }
+
+    .banners-h5 {
+      display: none;
+    }
+
+    .banner-box {
+      padding: 64px 0;
+    }
+
+    .banners {
+      height: 480px;
+      display: block;
+
+      .carousel-img {
+        height: 480px;
+        width: auto;
+        margin: 0 auto;
+      }
+    }
 
     /* 桌面样式 */
     .top {
@@ -326,6 +513,7 @@ const goInfo = item => {
       align-items: stretch;
       justify-content: center;
       padding-right: 5%;
+
       .coop-title {
         padding: 0 32px;
         height: auto;
@@ -359,7 +547,7 @@ const goInfo = item => {
         .coop-item {
           width: 119px;
           height: 119px;
-          margin-bottom: 12px;
+          margin-bottom: 8px;
         }
       }
     }
