@@ -9,12 +9,15 @@
       <img class="logo" src="@/assets/home/index_app_video_logo.webp" alt="">
     </div>
 
+    <!-- banner -->
+    <div v-if="ads.banner && ads.banner.length" class="maxwidth" style="margin: 0 auto">
+      <img @click="openAd('banner', item)" style="width:100%;height:auto;display: block;cursor: pointer;"
+        v-for="item in ads.banner" :key="item.id" :src="item.image" alt="">
+    </div>
+
     <!-- 轮播 -->
-    <NCarousel autoplay touchable draggable class="banners">
-      <img class="banner" src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel1.jpeg">
-      <img class="banner" src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel2.jpeg">
-      <img class="banner" src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel3.jpeg">
-      <img class="banner" src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel4.jpeg">
+    <NCarousel v-if="ads.carousel && ads.carousel.length" autoplay touchable draggable class="banners">
+      <img style="cursor: pointer;" @click="openAd('carousel', item)" v-for="item in ads.carousel" :key="'b-' + item.id" class="banner" :src="item.image">
     </NCarousel>
 
     <!-- 电影 -->
@@ -24,10 +27,10 @@
         <img class="btn" src="@/assets/home/more_icon.webp" alt="">
       </div>
     </div>
-    <n-carousel touchable :show-dots="false" class="movie-list" :slides-per-view="3" :space-between="10" :loop="false" draggable>
-      <div class="movie-item" v-for="i in 20" :key="i">
+    <n-carousel v-if="videos.length" touchable :show-dots="false" class="movie-list" :slides-per-view="3" :space-between="10" :loop="false" draggable>
+      <div class="movie-item" style="cursor: pointer;" @click="goInfo(item)" v-for="item in videos" :key="'b-' + item.id">
         <img style="width: 100%;height: 100%"
-          src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel1.jpeg" alt="">
+          :src="item.image" alt="">
       </div>
     </n-carousel>
 
@@ -39,9 +42,9 @@
       </div>
 
       <div class="coop-box">
-        <div class="coop-item" v-for="i in 20" :key="i">
+        <div class="coop-item" @click="openAd('app', item)" v-for="item in midApps" :key="item.id">
           <img style="width: 100%;height:100%"
-            src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel1.jpeg" alt="">
+            :src="item.image" alt="">
         </div>
       </div>
     </div>
@@ -53,13 +56,43 @@
     </div>
 
 
+     <!-- 右侧广告 -->
+     <ConAdRight :list="rightApps" v-if="rightApps.length" />
   </div>
 </template>
 
 
 <script setup>
+import ConAdRight from "@/components/ConAdRight.vue"
 import { NCarousel } from 'naive-ui'
+import store from '@/store';
+import { computed } from "vue"
 
+store.dispatch('updateAds', 1)
+const videos = computed(() => store.state.config.video || [])
+const ads = computed(() => store.state.ads[1] || {})
+const rightApps = computed(() => { // 右侧广告
+  if (!ads.value || !ads.value.app || !ads.value.app.length) return []
+  return ads.value.app.filter(item => item.flag == 1) || []
+})
+const midApps = computed(() => { // 中间广告
+  if (!ads.value || !ads.value.app || !ads.value.app.length) return []
+  return (ads.value.app.filter(item => item.flag == 0) || []).map(item => {
+    item.type = 'ad'
+    return item
+  })
+})
+
+const openAd = (type, item) => {
+  store.commit('openad', {
+    type,
+    item
+  })
+}
+
+const goInfo = item => {
+  store.commit('goVideoInfo', item)
+}
 </script>
 
 <style lang="less" scoped>
@@ -181,6 +214,7 @@ import { NCarousel } from 'naive-ui'
         width: 18vw;
         height: 18vw;
         margin-bottom: 1vw;
+        cursor: pointer;
       }
     }
   }

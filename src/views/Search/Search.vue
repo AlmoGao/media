@@ -3,18 +3,80 @@
     <div class="page-search">
         <img class="title" src="@/assets/search/search_page_title.webp" alt="">
 
-        <div class="maxwidth search">
-            <img class="icon" src="@/assets/search_icon.png" alt="">
+        <NSpin :show="loading">
+            <div class="maxwidth search">
+                <img class="icon" src="@/assets/search_icon.png" alt="">
 
-            <input placeholder="输入搜索内容" class="ipt" type="text">
+                <input v-model.trim="keyWord" placeholder="输入搜索内容" class="ipt" type="text" @keydown.enter="reset">
+            </div>
+        </NSpin>
+
+        <!-- banner -->
+        <div v-if="ads.banner && ads.banner.length" class="maxwidth" style="margin: 0 auto">
+            <img @click="openAd('banner', item)" style="width:100%;height:auto;display: block;cursor: pointer;"
+                v-for="item in ads.banner" :key="item.id" :src="item.image" alt="">
         </div>
 
+        <div class="maxwidth result-box" style="margin: 0 auto">
+            <ConList @more="getList" :list="list" :loading="loading" :finish="finish" />
+        </div>
 
+        <!-- 右侧广告 -->
+        <ConAdRight :list="rightApps" v-if="rightApps.length" />
     </div>
 </template>
 
 
 <script setup>
+import ConAdRight from "@/components/ConAdRight.vue"
+import { NSpin } from "naive-ui"
+import ConList from "@/components/ConList.vue"
+import https from '@/api';
+import { ref, computed  } from "vue"
+import store from "@/store";
+
+store.dispatch('updateAds', 4)
+const ads = computed(() => store.state.ads[4] || {})
+const rightApps = computed(() => { // 右侧广告
+    if (!ads.value || !ads.value.app || !ads.value.app.length) return []
+    return ads.value.app.filter(item => item.flag == 1) || []
+})
+const openAd = (type, item) => {
+    store.commit('openad', {
+        type,
+        item
+    })
+}
+
+
+
+const keyWord = ref('')
+
+const loading = ref(false)
+const page = ref(0)
+const finish = ref(false)
+const list = ref([])
+const getList = () => {
+    if (loading.value || finish.value || keyWord.value === '') return
+    loading.value = true
+    page.value++
+    const word = keyWord.value
+    https.search_video(keyWord.value || '', page.value).then(res => {
+        if (word !== keyWord.value) return
+        if (!res || !res.length) return finish.value = true
+        list.value.push(...res)
+    }).finally(() => {
+        if (word !== keyWord.value) return
+        loading.value = false
+    })
+}
+const reset = () => {
+    loading.value = false
+    finish.value = false
+    list.value = []
+    page.value = 0
+    getList()
+}
 
 </script>
 

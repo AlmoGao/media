@@ -6,63 +6,104 @@
       <img src="@/assets/movies_page_title.webp" alt="">
     </div>
 
+    <!-- banner -->
+    <div v-if="ads.banner && ads.banner.length" class="maxwidth" style="margin: 0 auto">
+      <img @click="openAd('banner', item)" style="width:100%;height:auto;display: block;cursor: pointer;"
+        v-for="item in ads.banner" :key="item.id" :src="item.image" alt="">
+    </div>
+
     <!-- 分类 -->
     <div class="maxwidth cate-box">
-      <div class="cate-item" @click="changeCate(item)" :class="{'active-cate': activeId == item.id}" v-for="item in category" :key="item.id">{{ item.name }}</div>
+      <div class="cate-item" @click="changeCate(item)" :class="{ 'active-cate': activeId == item.id }"
+        v-for="item in category" :key="item.id">{{ item.name }}</div>
+      <div @click="openAd('tad', item)" class="gradient-text cate-item" v-for="item in ads.tad || []"
+        :key="'ad' + item.id">{{ item.title }}</div>
     </div>
 
 
     <!-- 轮播图 -->
-    <div class="banner-box" style="background-color: #3b3b3b;">
+    <div class="banner-box" v-if="ads.carousel && ads.carousel.length" style="background-color: #3b3b3b;">
       <!-- h5 -->
       <NCarousel autoplay touchable draggable class="banners-h5">
-        <img class="carousel-img" src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel1.jpeg">
-        <img class="carousel-img" src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel2.jpeg">
-        <img class="carousel-img" src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel3.jpeg">
-        <img class="carousel-img" src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel4.jpeg">
+        <img style="cursor: pointer;" @click="openAd('carousel', item)" v-for="item in ads.carousel" :key="'b-' + item.id"
+          class="carousel-img" :src="item.image">
       </NCarousel>
 
       <!-- pc -->
       <NCarousel autoplay effect="card" class="banners" touchable draggable
         prev-slide-style="transform: translateX(-110%) translateZ(-200px);"
         next-slide-style="transform: translateX(10%) translateZ(-200px);">
-        <NCarouselItem :style="{ width: '60%' }">
-          <img class="carousel-img" src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel1.jpeg">
-        </NCarouselItem>
-        <NCarouselItem :style="{ width: '60%' }">
-          <img class="carousel-img" src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel2.jpeg">
-        </NCarouselItem>
-        <NCarouselItem :style="{ width: '60%' }">
-          <img class="carousel-img" src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel3.jpeg">
-        </NCarouselItem>
-        <NCarouselItem :style="{ width: '60%' }">
-          <img class="carousel-img" src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel4.jpeg">
+        <NCarouselItem :style="{ width: '80%' }" v-for="item in ads.carousel" :key="'pb-' + item.id">
+          <img style="cursor: pointer;" class="carousel-img" @click="openAd('carousel', item)" :src="item.image">
         </NCarouselItem>
       </NCarousel>
     </div>
 
 
     <!-- 电影列表 -->
-    <ConList style="margin: 0 auto;" />
+    <ConList @more="getList" :list="list" :loading="loading" :finish="finish" style="margin: 0 auto;" />
 
+
+    <!-- 右侧广告 -->
+    <ConAdRight :list="rightApps" v-if="rightApps.length" />
   </div>
 </template>
 
 
 <script setup>
+import ConAdRight from "@/components/ConAdRight.vue"
 import { NCarousel, NCarouselItem } from 'naive-ui'
 import ConList from "@/components/ConList.vue"
 import store from '@/store';
 import { computed, watch, ref } from "vue"
+import https from '@/api';
+store.dispatch('updateAds', 2)
 
 const category = computed(() => store.state.category || [])
+const ads = computed(() => store.state.ads[2] || {})
+const rightApps = computed(() => { // 右侧广告
+  if (!ads.value || !ads.value.app || !ads.value.app.length) return []
+  return ads.value.app.filter(item => item.flag == 1) || []
+})
+const midApps = computed(() => { // 中间广告
+  if (!ads.value || !ads.value.app || !ads.value.app.length) return []
+  return (ads.value.app.filter(item => item.flag == 0) || []).map(item => {
+    item.type = 'ad'
+    return item
+  })
+})
 const activeId = ref('')
 
+
+const loading = ref(false)
+const page = ref(0)
+const finish = ref(false)
+const list = ref([])
 const getList = () => {
-  console.error('获取历史')
+  if (loading.value || finish.value) return
+  loading.value = true
+  page.value++
+  const id = activeId.value
+  https.category_video(activeId.value, page.value).then(res => {
+    if (id !== activeId.value) return
+    if (!res || !res.length) return finish.value = true
+    list.value.push(...res)
+    list.value.push(...midApps.value)
+  }).finally(() => {
+    if (id !== activeId.value) return
+    loading.value = false
+  })
+}
+const reset = () => {
+  loading.value = false
+  finish.value = false
+  list.value = []
+  page.value = 0
+  getList()
 }
 const changeCate = item => {
   activeId.value = item.id
+  reset()
 }
 
 watch(() => category, val => {
@@ -72,11 +113,31 @@ watch(() => category, val => {
   }
 }, { immediate: true })
 
+const openAd = (type, item) => {
+  store.commit('openad', {
+    type,
+    item
+  })
+}
+
 </script>
 
 <style lang="less" scoped>
 /* 默认样式 - 移动优先 (小于750px) */
 .page-movie {
+
+  .gradient-text {
+    background: linear-gradient(90deg, #d23c96 0%, #f49f02 100%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+    text-fill-color: transparent;
+    display: inline-block;
+    /* 确保渐变效果正确应用 */
+  }
 
   /* 移动设备样式 */
   .top {

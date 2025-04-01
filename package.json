@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@babel/preset-env": "^7.26.9",
+    "artplayer": "^5.2.2",
     "axios": "^1.4.0",
     "core-js": "^3.41.0",
     "mitt": "^3.0.1",

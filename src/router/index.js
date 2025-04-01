@@ -23,6 +23,16 @@ const routes = [
     component: () => import("../views/Search/Search.vue"),
   },
   {
+    path: '/info',
+    name: 'info',
+    component: () => import("../views/Info/Info.vue"),
+  },
+  {
+    path: '/wait',
+    name: 'wait',
+    component: () => import("../views/Home/Wait.vue"),
+  },
+  {
     // 找不到路由时
     path: '/:pathMatch(.*)*',
     redirect: '/',

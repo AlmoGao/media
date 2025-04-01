@@ -14,9 +14,9 @@ class HttpService {
       method: "get",
     });
   }
-  indexAd() {
+  indexAd(cid) {
     // 广告
-    return http("/api/index/ad?site_id=1&cid=", {
+    return http("/api/index/ad?site_id=1&cid=" + cid, {
       method: "get",
     });
   }
@@ -24,17 +24,17 @@ class HttpService {
     // 视频分类
     return http("/api/index/category", {
       method: "get",
-    });
+    }); 
   }
-  category_video(cid, page, limit) {
+  category_video(cid, page) {
     // 分类视频列表接口 
-    return http(`/api/index/category_video?cid=${cid}&page=${page}&limit=${limit}`, {
+    return http(`/api/index/category_video?cid=${cid}&page=${page}&limit=20`, {
       method: "get",
     });
   }
-  search_video(cid, page, limit) {
+  search_video(search_content, page) {
     // 搜索视频接口 
-    return http(`/api/index/search_video?cid=${cid}&page=${page}&limit=${limit}`, {
+    return http(`/api/index/search_video?search_content=${search_content}&page=${page}&limit=20`, {
       method: "get",
     });
   }

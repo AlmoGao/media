@@ -4,7 +4,7 @@
         <!-- pc -->
         <div class="con-header-pc">
             <div class="maxwidth con-pc">
-                <img class="logo" src="@/assets/logo-h.png" alt="">
+                <img class="logo" :src="site.logo_image" alt="">
                 <div style="flex: 1;"></div>
                 <div class="navs">
                     <div class="nav" @click="jump(item.route)" :class="{ 'active_nav': route.name == item.route }" v-for="(item, i) in navs"
@@ -24,7 +24,7 @@
         <NDrawer v-model:show="active" :width="120" :placement="'left'">
             <NDrawerContent title="">
                 <div class="header-left-dialog">
-                    <img class="logo" src="@/assets/app_logo.webp" alt="">
+                    <img class="logo" :src="site.mobile_logo_image" alt="">
                     <div class="navs">
                         <div class="nav" @click="jump(item.route)" :class="{ 'active_nav': route.name == item.route }" v-for="(item, i) in navs"
                             :key="i">{{ item.name }}</div>
@@ -37,9 +37,13 @@
 
 <script setup>
 import { NDrawer, NDrawerContent } from "naive-ui"
-import { ref } from "vue"
+import { ref, computed } from "vue"
 import { useRoute } from "vue-router"
 import router from "@/router"
+import store from "@/store"
+
+
+const site = computed(() => store.state.config.site || {})
 
 const route = useRoute()
 const active = ref(false)
@@ -47,7 +51,7 @@ const navs = ref([
     { name: '首页', route: 'home' },
     { name: '影片', route: 'movies' },
     { name: '福利', route: 'gift' },
-    { name: '消息', route: 'message' },
+    // { name: '消息', route: 'message' },
 ])
 
 
@@ -101,7 +105,7 @@ const jump = name => {
             position: fixed;
             left: 0;
             top: 0;
-            z-index: 10;
+            z-index: 99;
             width: 12vw;
             height: 9vw;
             cursor: pointer;
@@ -111,7 +115,7 @@ const jump = name => {
             position: fixed;
             top: 0;
             right: 0;
-            z-index: 10;
+            z-index: 99;
             width: 12vw;
             height: 9vw;
             cursor: pointer;
@@ -159,6 +163,7 @@ const jump = name => {
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 0 5px #eee;
 
             .con-pc {
                 display: flex;

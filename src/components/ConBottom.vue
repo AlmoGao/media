@@ -4,17 +4,17 @@
 
         <div class="box">
             <div class="left">
-                <div class="title">SA国际传媒 | 华语片圈先驱者</div>
-                <div class="left-con"> SA国际传媒创立至今，一直屹立于行业浪尖。作为华语片圈的先驱者，以用户全平台体验为核心，提供最新的全方位技术支持，致力打造最好的娱乐生态圈。</div>
+                <div class="title">{{site.name}} | 华语片圈先驱者</div>
+                <div class="left-con"> {{site.name}}创立至今，一直屹立于行业浪尖。作为华语片圈的先驱者，以用户全平台体验为核心，提供最新的全方位技术支持，致力打造最好的娱乐生态圈。</div>
             </div>
             <div class="line"></div>
             <div class="right">
                 <div class="title">
-                    <img class="icon" src="@/assets/mail_icon.png" alt="">
-                    <span>asdasd@gmail.com</span>
+                    <img class="icon" src="@/assets/telegram.png" alt="">
+                    <span style="user-select: all;">{{ site.telergam }}</span>
                 </div>
 
-                <div class="qr-con">
+                <!-- <div class="qr-con">
                     <div class="qr-item">
                         <div class="qr"></div>
                         <div class="name">商务</div>
@@ -24,14 +24,22 @@
                         <div class="qr"></div>
                         <div class="name">客服</div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
 
         <div class="line"></div>
-        <div class="copyright">Copyright @ 2025 | SA国际传媒有限公司 保留所有权力。 </div>
+        <div class="copyright">Copyright @ 2025 | {{site.name}}有限公司 保留所有权力。 </div>
     </div>
 </template>
+
+<script setup>
+import store from "@/store"
+import { computed } from "vue"
+
+const site = computed(() => store.state.config.site || {})
+
+</script>
 
 <style lang="less" scoped>
 .con-bottom {
@@ -70,6 +78,8 @@
                 .icon {
                     height: 4vw;
                     margin-right: 2vw;
+                    border-radius: 50%;
+                    background-color: #fff;
                 }
             }
 
@@ -192,7 +202,7 @@
         }
         .box {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             justify-content: center;
             .left {
                 width: 400px;
@@ -202,7 +212,7 @@
             }
             .line {
                 width: 1px;
-                height: 300px;
+                height: 200px;
             }
             .right {
                 .qr-con {
