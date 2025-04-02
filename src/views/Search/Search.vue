@@ -10,6 +10,11 @@
                 <input v-model.trim="keyWord" placeholder="输入搜索内容" class="ipt" type="text" @keydown.enter="reset">
             </div>
         </NSpin>
+        <!-- 热搜 -->
+        <div class="maxwidth hots">
+            <div class="name">当前热搜：</div>
+            <div class="hot" @click="clickHot(item)" v-for="(item,i) in hots" :key="i">{{ item }}</div>
+         </div>
 
         <!-- 轮播 -->
         <n-carousel v-if="ads.carousel && ads.carousel.length" touchable :show-dots="false" class="movie-list" :slides-per-view="3"
@@ -19,11 +24,7 @@
                 <img style="width: 100%;height: 100%" :src="item.image" alt="">
             </div>
         </n-carousel>
-        <!-- 热搜 -->
-         <div class="maxwidth hots">
-            <div class="name">当前热搜：</div>
-            <div class="hot" @click="clickHot(item)" v-for="(item,i) in hots" :key="i">{{ item }}</div>
-         </div>
+        
 
         <!-- 文字 -->
         <div class="maxwidth ad-texts" v-if="ads.tad && ads.tad.length">
@@ -58,8 +59,8 @@ import store from "@/store";
 
 
 
-store.dispatch('updateAds', 4)
-const ads = computed(() => store.state.ads[4] || {})
+store.dispatch('updateAds', 7)
+const ads = computed(() => store.state.ads[7] || {})
 const rightApps = computed(() => { // 右侧广告
     if (!ads.value || !ads.value.app || !ads.value.app.length) return []
     return ads.value.app.filter(item => item.flag == 1) || []
