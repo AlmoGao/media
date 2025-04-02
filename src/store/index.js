@@ -22,17 +22,15 @@ export default createStore({
     openad(state, val) { // 打开广告
       if (val.item.url) window.open(val.item.url)
       switch (val.type) {
+        case 'vad':
+          break
         case 'tad':
-
           break
         case 'carousel':
-
           break
         case 'banner':
-
           break
         case 'app':
-
           break
       }
     },

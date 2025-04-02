@@ -17,8 +17,8 @@
          </div>
 
         <!-- 轮播 -->
-        <n-carousel v-if="ads.carousel && ads.carousel.length" touchable :show-dots="false" class="movie-list" :slides-per-view="3"
-            :space-between="10" :loop="false" draggable>
+        <n-carousel :autoplay="true" :interval="1000" v-if="ads.carousel && ads.carousel.length" touchable :show-dots="false" class="movie-list" :slides-per-view="3"
+            :space-between="10" :loop="true"  draggable>
             <div class="movie-item" style="cursor: pointer;" @click="openAd('carousel', item)" v-for="item in ads.carousel"
                 :key="'b-' + item.id">
                 <img style="width: 100%;height: 100%" :src="item.image" alt="">

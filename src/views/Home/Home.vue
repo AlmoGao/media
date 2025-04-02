@@ -3,10 +3,10 @@
   <div class="page-home">
     <!-- 顶部图片 -->
     <div class="top">
-      <video class="video" autoplay muted webkit-playsinline="" playsinline="" preload="metadata"
+      <!-- <video class="video" autoplay muted webkit-playsinline="" playsinline="" preload="metadata"
         src="blob:https://sagj.me/1bc2ec15-925e-4398-be3f-680f27c4daf3" style="width: 100%;height: 100%;">
-      </video>
-      <img class="logo" src="@/assets/home/index_app_video_logo.webp" alt="">
+      </video> -->
+      <!-- <img class="logo" src="@/assets/home/index_app_video_logo.webp" alt=""> -->
     </div>
 
 
@@ -86,11 +86,17 @@
       </div>
     </div>
 
+    <!-- 电影列表 -->
+    <div class="maxwidth" style="margin: 0 auto;">
+      <ConList :from="'home2'" :list="new_video" :loading="false" :finish="false" />
+    </div>
 
     <!-- 底部 -->
     <div style="margin: 0 auto;width: 100%;max-width: 800px;">
       <img style="width: 100%;height: auto;" src="@/assets/home/our_about_img.webp" alt="">
     </div>
+
+
 
 
     <!-- 右侧广告 -->
@@ -100,6 +106,7 @@
 
 
 <script setup>
+import ConList from "@/components/ConList.vue"
 import ConAdRight from "@/components/ConAdRight.vue"
 import { NCarousel, NCarouselItem } from 'naive-ui'
 import store from '@/store';
@@ -108,6 +115,7 @@ import router from "@/router";
 
 store.dispatch('updateAds', 1)
 const videos = computed(() => store.state.config.video || [])
+const new_video = computed(() => store.state.config.new_video || [])
 const ads = computed(() => store.state.ads[1] || {})
 const rightApps = computed(() => { // 右侧广告
   if (!ads.value || !ads.value.app || !ads.value.app.length) return []
@@ -134,7 +142,7 @@ const goInfo = item => {
 }
 
 const jump = name => {
-  router.push({name})
+  router.push({ name })
 }
 
 
@@ -164,7 +172,7 @@ const startAni = () => {
       let loading2 = false
       let loading4 = false
 
-      
+
       scrollInterval = setInterval(() => {
         let b1 = scroll1Ref.value.scrollLeft
         scroll1Ref.value.scrollLeft += step
@@ -229,19 +237,19 @@ onBeforeUnmount(() => {
 
   /* 移动设备样式 */
   .top {
-    width: 100%;
-    height: 90vw;
-    background-color: #000;
-    position: relative;
+    // width: 100%;
+    // height: 90vw;
+    // background-color: #000;
+    // position: relative;
 
-    .logo {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translateX(-50%) translateY(-50%);
-      width: 50%;
-      height: auto;
-    }
+    // .logo {
+    //   position: absolute;
+    //   top: 50%;
+    //   left: 50%;
+    //   transform: translateX(-50%) translateY(-50%);
+    //   width: 50%;
+    //   height: auto;
+    // }
   }
 
   .banners {
@@ -391,11 +399,11 @@ onBeforeUnmount(() => {
 
     /* 平板样式 */
     .top {
-      height: 80vw;
+      // height: 80vw;
 
-      .logo {
-        width: 300px;
-      }
+      // .logo {
+      //   width: 300px;
+      // }
     }
 
     .banners {
@@ -485,7 +493,7 @@ onBeforeUnmount(() => {
     /* 桌面样式 */
     .top {
       padding-top: 100px;
-      height: 700px;
+      // height: 700px;
     }
 
     .banners {
