@@ -9,7 +9,16 @@
       </div>
 
       <!-- 广告 -->
-      <div class="list-ad-box" v-if="i % 24 == 0 && props.midApps.length">
+      <div class="list-ad-box" v-if="(i > 0 && (i + 1) % 24 == 0) && props.midApps.length">
+        <div @click="goAd(ad)" class="list-ad-box-item" v-for="ad in props.midApps" :key="ad.id">
+          <img class="list-ad-box-img" :src="ad.image" alt="">
+          <div class="list-ad-box-title">{{ ad.title }}</div>
+        </div>
+      </div>
+    </template>
+
+    <template v-if="props.onlyApp">
+      <div class="list-ad-box" v-if="props.onlyApp && props.midApps.length">
         <div @click="goAd(ad)" class="list-ad-box-item" v-for="ad in props.midApps" :key="ad.id">
           <img class="list-ad-box-img" :src="ad.image" alt="">
           <div class="list-ad-box-title">{{ ad.title }}</div>
@@ -18,7 +27,7 @@
     </template>
 
 
-    <div class="loading_more" ref="moreRef">{{ finish ? '没有更多了' : (loading ? '加载中...' : '') }}</div>
+    <div v-if="!props.onlyApp" class="loading_more" ref="moreRef">{{ finish ? '没有更多了' : (loading ? '加载中...' : '') }}</div>
   </div>
 </template>
 
@@ -47,9 +56,18 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  onlyApp: {
+    type: Boolean,
+    default: false
+  },
+  from: {
+    type: String,
+    default: ''
+  }
 })
 const emits = defineEmits(['more'])
 const goInfo = item => {
+  item.from = props.from
   store.commit('goVideoInfo', item)
 }
 const goAd = item => {

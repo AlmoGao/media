@@ -46,7 +46,7 @@
 
 
     <!-- 电影列表 -->
-    <ConList @more="getList" :list="list" :midApps="midApps" :loading="loading" :finish="finish"
+    <ConList :from="'movies'" @more="getList" :list="list" :midApps="midApps" :loading="loading" :finish="finish"
       style="margin: 0 auto;" />
 
 

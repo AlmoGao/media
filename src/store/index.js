@@ -20,18 +20,19 @@ export default createStore({
   },
   mutations: {
     openad(state, val) { // 打开广告
-      switch(val.type) {
+      if (val.item.url) window.open(val.item.url)
+      switch (val.type) {
         case 'tad':
-          console.error('点击广告tad')
+
           break
         case 'carousel':
-          window.open(val.item.url)
+
           break
         case 'banner':
-          window.open(val.item.url)
+
           break
         case 'app':
-          window.open(val.item.url)
+
           break
       }
     },

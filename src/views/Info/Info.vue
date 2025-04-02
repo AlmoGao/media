@@ -2,6 +2,13 @@
 <template>
     <div class="page-info">
         <div class="h5_title">{{ video.title }}</div>
+
+
+        <!-- 合作 -->
+        <div>
+            <ConList :midApps="midApps" :onlyApp="true" :loading="false" :finish="true" />
+        </div>
+
         <div class="video-box" :style="{ backgroundImage: instance ? '' : `url(${video.image})` }">
             <div class="video" id="video" ref="videoRef" style="width: 100%;height: 100%;"></div>
         </div>
@@ -17,6 +24,10 @@
                 v-for="item in ads.banner" :key="item.id" :src="item.image" alt="">
         </div>
 
+        <!-- 电影列表 -->
+        <ConList :from="video.from" :list="list" :midApps="midApps" :loading="false" :finish="false"
+            style="margin: 0 auto;" />
+
         <!-- 右侧广告 -->
         <ConAdRight :list="rightApps" v-if="rightApps.length" />
     </div>
@@ -24,6 +35,7 @@
 
 
 <script setup>
+import ConList from "@/components/ConList.vue"
 import ConAdRight from "@/components/ConAdRight.vue"
 import store from '@/store';
 import { computed, onMounted, onBeforeUnmount, ref } from "vue"
@@ -32,6 +44,9 @@ import Artplayer from "artplayer";
 store.dispatch('updateAds', 6)
 const ads = computed(() => store.state.ads[6] || {})
 const video = computed(() => store.state.video || {})
+if (!video.value.m3u8) {
+    router.replace({ name: 'home' })
+}
 const rightApps = computed(() => { // 右侧广告
     if (!ads.value || !ads.value.app || !ads.value.app.length) return []
     return ads.value.app.filter(item => item.flag == 1) || []
@@ -93,6 +108,34 @@ function playM3u8(video, url, art) {
         art.notice.show = 'Unsupported playback format: m3u8';
     }
 }
+
+
+
+// 数据列表 ，  根据不同的 from 来取不同的值
+const list = ref([])
+switch (video.value.from) {
+    case 'home':
+        list.value = store.state.config.video || []
+        break
+    case 'movies':
+        try {
+            list.value = JSON.parse(sessionStorage.getItem('movie_list') || '[]')
+        } catch {
+            list.value = []
+        }
+        break
+    case 'search':
+        try {
+            list.value = JSON.parse(sessionStorage.getItem('search_list') || '[]')
+        } catch {
+            list.value = []
+        }
+        break
+    default:
+        list.value = store.state.config.video || []
+        break
+}
+
 </script>
 
 <style lang="less" scoped>

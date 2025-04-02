@@ -11,6 +11,20 @@
             </div>
         </NSpin>
 
+        <!-- 轮播 -->
+        <n-carousel v-if="ads.carousel && ads.carousel.length" touchable :show-dots="false" class="movie-list" :slides-per-view="3"
+            :space-between="10" :loop="false" draggable>
+            <div class="movie-item" style="cursor: pointer;" @click="openAd('carousel', item)" v-for="item in ads.carousel"
+                :key="'b-' + item.id">
+                <img style="width: 100%;height: 100%" :src="item.image" alt="">
+            </div>
+        </n-carousel>
+        <!-- 热搜 -->
+         <div class="maxwidth hots">
+            <div class="name">当前热搜：</div>
+            <div class="hot" @click="clickHot(item)" v-for="(item,i) in hots" :key="i">{{ item }}</div>
+         </div>
+
         <!-- 文字 -->
         <div class="maxwidth ad-texts" v-if="ads.tad && ads.tad.length">
             <div @click="openAd('tad', item)" class="gradient-text ad-text" v-for="item in ads.tad || []"
@@ -24,7 +38,7 @@
         </div>
 
         <div class="maxwidth result-box" style="margin: 0 auto">
-            <ConList :midApps="midApps" @more="getList" :list="list" :loading="loading" :finish="finish" />
+            <ConList :from="'search'" :midApps="midApps" @more="getList" :list="list" :loading="loading" :finish="finish" />
         </div>
 
         <!-- 右侧广告 -->
@@ -35,11 +49,14 @@
 
 <script setup>
 import ConAdRight from "@/components/ConAdRight.vue"
-import { NSpin } from "naive-ui"
+import { NSpin, NCarousel } from "naive-ui"
 import ConList from "@/components/ConList.vue"
 import https from '@/api';
 import { ref, computed } from "vue"
 import store from "@/store";
+
+
+
 
 store.dispatch('updateAds', 4)
 const ads = computed(() => store.state.ads[4] || {})
@@ -48,11 +65,11 @@ const rightApps = computed(() => { // 右侧广告
     return ads.value.app.filter(item => item.flag == 1) || []
 })
 const midApps = computed(() => { // 中间广告
-  if (!ads.value || !ads.value.app || !ads.value.app.length) return []
-  return (ads.value.app.filter(item => item.flag == 0) || []).map(item => {
-    item.type = 'ad'
-    return item
-  })
+    if (!ads.value || !ads.value.app || !ads.value.app.length) return []
+    return (ads.value.app.filter(item => item.flag == 0) || []).map(item => {
+        item.type = 'ad'
+        return item
+    })
 })
 const openAd = (type, item) => {
     store.commit('openad', {
@@ -64,7 +81,6 @@ const openAd = (type, item) => {
 
 
 const keyWord = ref(sessionStorage.getItem('search_word') || '')
-
 const loading = ref(false)
 const page = ref(sessionStorage.getItem('search_page') || 0)
 const finish = ref(false)
@@ -102,6 +118,15 @@ const reset = () => {
     getList()
 }
 
+
+// 热搜
+const  hots = ref(['萝莉', '黑丝', '高潮', '后入', '抖音', '动漫', '麻豆', '福利'])
+const clickHot = val => {
+    keyWord.value = val
+    setTimeout(() => {
+        reset()
+    }, 0)
+}
 </script>
 
 <style lang="less" scoped>
@@ -110,6 +135,43 @@ const reset = () => {
     background-image: url('@/assets/search_page_bg.webp');
     background-size: 100% auto;
     background-repeat: no-repeat;
+
+    .hots {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        position: relative;
+        top: -2vw;
+        margin: 0 auto;
+        .name {
+            margin-bottom: 2vw;
+            font-size: 4vw;
+            padding-left: 2vw;
+        }
+        .hot {
+            font-size: 3.2vw;
+            margin-left: 2vw;
+            cursor: pointer;
+            padding: 1vw 3vw;
+            border-radius: 5vw;
+            background-color: #fff;
+            color: #6a58bc;
+            white-space: nowrap;
+            
+            margin-bottom: 2vw;
+        }
+    }
+
+    .movie-list {
+        width: 100%;
+
+        .movie-item {
+            width: 40vw;
+            height: 24vw;
+            cursor: pointer;
+        }
+    }
 
     /* 移动设备样式 */
     .title {
@@ -144,6 +206,22 @@ const reset = () => {
 /* 平板设备 (750px及以上) */
 @media (min-width: 750px) {
     .page-search {
+
+        .hots {
+        top: -24px;
+        .name {
+            margin-bottom: 20px;
+            font-size: 24px;
+            padding-left: 20px;
+        }
+        .hot {
+            font-size: 20px;
+            margin-left: 20px;
+            padding: 6px 20px;
+            border-radius: 30px;
+            margin-bottom: 20px;
+        }
+    }
 
         /* 平板样式 */
         .title {

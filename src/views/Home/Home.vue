@@ -129,6 +129,7 @@ const openAd = (type, item) => {
 }
 
 const goInfo = item => {
+  item.from = 'home'
   store.commit('goVideoInfo', item)
 }
 
