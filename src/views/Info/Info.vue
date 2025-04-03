@@ -11,7 +11,7 @@
 
         <div class="video-box" :style="{ backgroundImage: instance ? '' : `url(${video.image})` }">
 
-            <div style="position: absolute;z-index: 100;top: 5%;right: 5%;color: #fff;font-size: 20px;border-radius: 20px;background-color: rgba(0,0,0,0.5);padding: 2px 12px;pointer-events: none;" >{{ timeout }}s</div>
+            <div v-if="timeout" style="position: absolute;z-index: 100;top: 5%;right: 5%;color: #fff;font-size: 20px;border-radius: 20px;background-color: rgba(0,0,0,0.5);padding: 2px 12px;pointer-events: none;" >{{ timeout }}s</div>
 
             <img @click="openAd('vad', vad)" v-if="timeout" style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;z-index: 99;cursor: pointer;" :src="vad.image" alt="">
             <div class="video" id="video" ref="videoRef" style="width: 100%;height: 100%;"></div>
