@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN" itemscope>
+
+<head>
+    <!-- 基础元数据 -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- 主要SEO元素 -->
+    <title>网站名称</title>
+    <meta name="description" content="网站描述">
+    <meta name="keywords" content="网站关键词1,网站关键词2,网站关键词3">
+
+    <!-- 作者和版权信息 -->
+    <meta name="author" content="网站名称">
+    <meta name="copyright" content="© 2023 网站名称. 保留所有权利。">
+
+    <!-- 社交媒体元数据 -->
+    <meta property="og:title" content="网站名称">
+    <meta property="og:description" content="网站描述">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.example.com">
+    <!-- <meta property="og:image" content="https://www.example.com/images/og-image.jpg"> -->
+    <meta property="og:site_name" content="网站名称">
+
+    <!-- Twitter卡片数据 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="网站名称">
+    <meta name="twitter:description" content="网站描述">
+    <!-- <meta name="twitter:image" content="https://www.example.com/images/twitter-image.jpg"> -->
+    <meta name="twitter:site" content="@sa">
+    <meta name="twitter:creator" content="@sa">
+
+
+    <!-- 规范URL -->
+    <link rel="canonical" href="https://www.example.com">
+
+    <!-- 结构化数据/JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@type": "Organization",
+        "name": "网站名称",
+        "url": "https://www.example.com",
+    }
+    </script>
+
+
+    <!-- 其他SEO相关标签 -->
+    <meta name="robots" content="index, follow">
+    <meta name="revisit-after" content="7 days">
+    <meta name="rating" content="general">
+    <meta name="geo.region" content="CN">
+    <meta name="geo.placename" content="Beijing">
+    <meta name="geo.position" content="39.9042;116.4074">
+    <meta name="ICBM" content="39.9042, 116.4074">
+
+    <!-- 移动端优化 -->
+    <meta name="theme-color" content="#ffffff">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="网站名称">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- 防止搜索引擎显示翻译工具 -->
+    <meta name="google" content="notranslate">
+
+    <!-- 防止搜索引擎显示缓存链接 -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        .__spinner-container {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -webkit-flex-direction: column;
+            flex-direction: column;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+        }
+
+        .__spinner {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(to right, #545ac9, #dd5f80, #fab753);
+            -webkit-animation: cube-shadow-spinner 1.8s cubic-bezier(0.75, 0, 0.5, 1) infinite;
+            animation: cube-shadow-spinner 1.8s cubic-bezier(0.75, 0, 0.5, 1) infinite;
+        }
+
+        @-webkit-keyframes cube-shadow-spinner {
+            50% {
+                border-radius: 50%;
+                -webkit-transform: scale(0.5) rotate(360deg);
+                transform: scale(0.5) rotate(360deg);
+            }
+
+            100% {
+                -webkit-transform: scale(1) rotate(720deg);
+                transform: scale(1) rotate(720deg);
+            }
+        }
+
+        @keyframes cube-shadow-spinner {
+            50% {
+                border-radius: 50%;
+                -webkit-transform: scale(0.5) rotate(360deg);
+                transform: scale(0.5) rotate(360deg);
+            }
+
+            100% {
+                -webkit-transform: scale(1) rotate(720deg);
+                transform: scale(1) rotate(720deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="__spinner-container">
+        <div class="__spinner"></div>
+    </div>
+
+    <div style="padding-top: 44vh;text-align: center;">跳转中...</div>
+
+    <!-- seo内容 -->
+    <main style="position: fixed;top: 100%;right: 100%;">
+        <h2>seo内容</h2>
+    </main>
+
+    <script>
+        // location.href = ''
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="icon" href="/logo_sa.png" />
+  <title></title>
+  <script>
+    const arr = location.href.split("invite_code=");
+    if (arr[1]) {
+      const target = arr[1].split("#")[0];
+      localStorage.setItem("invite_code", target);
+    }
+  </script>
+  <script>
+    !function (p) { "use strict"; !function (t) { var s = window, e = document, i = p, c = "".concat("https:" === e.location.protocol ? "https://" : "http://", "sdk.51.la/js-sdk-pro.min.js"), n = e.createElement("script"), r = e.getElementsByTagName("script")[0]; n.type = "text/javascript", n.setAttribute("charset", "UTF-8"), n.async = !0, n.src = c, n.id = "LA_COLLECT", i.d = n; var o = function () { s.LA.ids.push(i) }; s.LA ? s.LA.ids && o() : (s.LA = p, s.LA.ids = [], o()), r.parentNode.insertBefore(n, r) }() }({ id: "K7jMzcXehwbhwBbb", ck: "K7jMzcXehwbhwBbb" });
+  </script>
+  <style>
+    body,
+    html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
+
+    .__spinner-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+    }
+
+    .__spinner {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      background: linear-gradient(to right, #545ac9, #dd5f80, #fab753);
+      -webkit-animation: cube-shadow-spinner 1.8s cubic-bezier(0.75, 0, 0.5, 1) infinite;
+      animation: cube-shadow-spinner 1.8s cubic-bezier(0.75, 0, 0.5, 1) infinite;
+    }
+
+    @-webkit-keyframes cube-shadow-spinner {
+      50% {
+        border-radius: 50%;
+        -webkit-transform: scale(0.5) rotate(360deg);
+        transform: scale(0.5) rotate(360deg);
+      }
+
+      100% {
+        -webkit-transform: scale(1) rotate(720deg);
+        transform: scale(1) rotate(720deg);
+      }
+    }
+
+    @keyframes cube-shadow-spinner {
+      50% {
+        border-radius: 50%;
+        -webkit-transform: scale(0.5) rotate(360deg);
+        transform: scale(0.5) rotate(360deg);
+      }
+
+      100% {
+        -webkit-transform: scale(1) rotate(720deg);
+        transform: scale(1) rotate(720deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="__spinner-container">
+      <div class="__spinner"></div>
+    </div>
+  </div>
+  <script src="./hls.min.js"></script>
+</body>
+
+</html>
