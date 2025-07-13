@@ -90,6 +90,7 @@ const onScroll = e => {
   if (!moreRef.value) return
   if (isElementPartiallyInViewport(moreRef.value)) {
     if (!props.loading && !props.finish) {
+      console.error('more')
       emits('more')
     }
   }

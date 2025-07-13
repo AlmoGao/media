@@ -84,9 +84,7 @@ const innerAds = computed(() => { // 列表插入广告
 })
 const activeId = ref(sessionStorage.getItem('movie_activeId') || '')
 
-setTimeout(() => {
-  console.error('内部广告', innerAds.value)
-}, 5000)
+
 
 
 const loading = ref(false)
@@ -139,9 +137,10 @@ const changeCate = item => {
   sessionStorage.setItem('movie_activeId', activeId.value)
 }
 
-watch(() => category, val => {
-  if (val.value && val.value.length && !activeId.value) {
-    activeId.value = val.value[0].id
+
+watch(() => category.value, val => {
+  if (val && val.length && !activeId.value) {
+    activeId.value = val[0].id
     getList()
     sessionStorage.setItem('movie_activeId', activeId.value)
   }
