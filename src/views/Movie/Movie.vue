@@ -78,7 +78,15 @@ const midApps = computed(() => { // 中间广告
     return item
   })
 })
+const innerAds = computed(() => { // 列表插入广告
+  if (!ads.value || !ads.value.vad || !ads.value.vad.length) return []
+  return ads.value.vad
+})
 const activeId = ref(sessionStorage.getItem('movie_activeId') || '')
+
+setTimeout(() => {
+  console.error('内部广告', innerAds.value)
+}, 5000)
 
 
 const loading = ref(false)
@@ -98,7 +106,19 @@ const getList = () => {
   https.category_video(activeId.value, page.value).then(res => {
     if (id !== activeId.value) return
     if (!res || !res.length) return finish.value = true
+    // 替换内部广告
+    if (innerAds.value && innerAds.value.length) {
+      res.forEach((item, i) => {
+        innerAds.value.forEach(ad => {
+          if (i + 1 == ad.weigh) {
+            res[i] = ad
+            res[i].is_ad = true
+          }
+        })
+      })
+    }
     list.value.push(...res)
+
     sessionStorage.setItem('movie_page', page.value)
     sessionStorage.setItem('movie_list', JSON.stringify(list.value))
   }).finally(() => {

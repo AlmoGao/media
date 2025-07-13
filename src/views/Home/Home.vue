@@ -88,7 +88,7 @@
 
     <!-- 电影列表 -->
     <div class="maxwidth" style="margin: 0 auto;">
-      <ConList :from="'home2'" :list="new_video" :loading="false" :finish="false" />
+      <ConList :from="'home2'" :list="new_video"  :loading="false" :finish="false" />
     </div>
 
     <!-- 底部 -->
@@ -127,6 +127,11 @@ const midApps = computed(() => { // 中间广告
     item.type = 'ad'
     return item
   })
+})
+
+const innerAds = computed(() => { // 列表插入广告
+    if (!ads.value || !ads.value.vad || !ads.value.vad.length) return []
+    return ads.value.vad
 })
 
 const openAd = (type, item) => {

@@ -6,7 +6,7 @@
 
         <!-- 合作 -->
         <div>
-            <ConList :midApps="midApps" :onlyApp="true" :loading="false" :finish="true" />
+            <ConList :midApps="midApps" :onlyApp="true"  :loading="false" :finish="true" />
         </div>
 
         <div class="video-box" :style="{ backgroundImage: instance ? '' : `url(${video.image})` }">
@@ -29,7 +29,7 @@
         </div>
 
         <!-- 电影列表 -->
-        <ConList :from="video.from" :list="list" :midApps="midApps" :loading="false" :finish="false"
+        <ConList :from="video.from" :list="list"  :midApps="midApps" :loading="false" :finish="false"
             style="margin: 0 auto;" />
 
         <!-- 右侧广告 -->
@@ -61,6 +61,11 @@ const midApps = computed(() => { // 中间广告
         item.type = 'ad'
         return item
     })
+})
+
+const innerAds = computed(() => { // 列表插入广告
+    if (!ads.value || !ads.value.vad || !ads.value.vad.length) return []
+    return ads.value.vad
 })
 const openAd = (type, item) => {
     store.commit('openad', {

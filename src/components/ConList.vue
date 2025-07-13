@@ -27,7 +27,8 @@
     </template>
 
 
-    <div v-if="!props.onlyApp" class="loading_more" ref="moreRef">{{ finish ? '没有更多了' : (loading ? '加载中...' : '') }}</div>
+    <div v-if="!props.onlyApp" class="loading_more" ref="moreRef">{{ finish ? '没有更多了' : (loading ? '加载中...' : '') }}
+    </div>
   </div>
 </template>
 
@@ -67,6 +68,13 @@ const props = defineProps({
 })
 const emits = defineEmits(['more'])
 const goInfo = item => {
+  if (item.is_ad) { // 广告
+    store.commit('openad', {
+      type: 'inner',
+      item
+    })
+    return
+  }
   item.from = props.from
   store.commit('goVideoInfo', item)
 }

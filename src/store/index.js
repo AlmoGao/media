@@ -32,6 +32,8 @@ export default createStore({
           break
         case 'app':
           break
+        case 'inner':
+          break
       }
     },
     setConfig(state, val) {

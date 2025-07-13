@@ -13,18 +13,18 @@
         <!-- 热搜 -->
         <div class="maxwidth hots">
             <div class="name">当前热搜：</div>
-            <div class="hot" @click="clickHot(item)" v-for="(item,i) in hots" :key="i">{{ item }}</div>
-         </div>
+            <div class="hot" @click="clickHot(item)" v-for="(item, i) in hots" :key="i">{{ item }}</div>
+        </div>
 
         <!-- 轮播 -->
-        <n-carousel :autoplay="true" :interval="1000" v-if="ads.carousel && ads.carousel.length" touchable :show-dots="false" class="movie-list" :slides-per-view="3"
-            :space-between="10" :loop="true"  draggable>
-            <div class="movie-item" style="cursor: pointer;" @click="openAd('carousel', item)" v-for="item in ads.carousel"
-                :key="'b-' + item.id">
+        <n-carousel :autoplay="true" :interval="1000" v-if="ads.carousel && ads.carousel.length" touchable
+            :show-dots="false" class="movie-list" :slides-per-view="3" :space-between="10" :loop="true" draggable>
+            <div class="movie-item" style="cursor: pointer;" @click="openAd('carousel', item)"
+                v-for="item in ads.carousel" :key="'b-' + item.id">
                 <img style="width: 100%;height: 100%" :src="item.image" alt="">
             </div>
         </n-carousel>
-        
+
 
         <!-- 文字 -->
         <div class="maxwidth ad-texts" v-if="ads.tad && ads.tad.length">
@@ -39,7 +39,8 @@
         </div>
 
         <div class="maxwidth result-box" style="margin: 0 auto">
-            <ConList :from="'search'" :midApps="midApps" @more="getList" :list="list" :loading="loading" :finish="finish" />
+            <ConList :from="'search'" :midApps="midApps" @more="getList" :list="list" :loading="loading"
+                :finish="finish" />
         </div>
 
         <!-- 右侧广告 -->
@@ -72,6 +73,10 @@ const midApps = computed(() => { // 中间广告
         return item
     })
 })
+const innerAds = computed(() => { // 列表插入广告
+    if (!ads.value || !ads.value.vad || !ads.value.vad.length) return []
+    return ads.value.vad
+})
 const openAd = (type, item) => {
     store.commit('openad', {
         type,
@@ -100,6 +105,17 @@ const getList = () => {
     https.search_video(keyWord.value || '', page.value).then(res => {
         if (word !== keyWord.value) return
         if (!res || !res.length) return finish.value = true
+        // 替换内部广告
+        if (innerAds.value && innerAds.value.length) {
+            res.forEach((item, i) => {
+                innerAds.value.forEach(ad => {
+                    if (i + 1 == ad.weigh) {
+                        res[i] = ad
+                        res[i].is_ad = true
+                    }
+                })
+            })
+        }
         list.value.push(...res)
 
         sessionStorage.setItem('search_page', page.value)
@@ -121,7 +137,7 @@ const reset = () => {
 
 
 // 热搜
-const  hots = ref(['萝莉', '黑丝', '高潮', '后入', '抖音', '动漫', '麻豆', '福利'])
+const hots = ref(['萝莉', '黑丝', '高潮', '后入', '抖音', '动漫', '麻豆', '福利'])
 const clickHot = val => {
     keyWord.value = val
     setTimeout(() => {
@@ -145,11 +161,13 @@ const clickHot = val => {
         position: relative;
         top: -2vw;
         margin: 0 auto;
+
         .name {
             margin-bottom: 2vw;
             font-size: 4vw;
             padding-left: 2vw;
         }
+
         .hot {
             font-size: 3.2vw;
             margin-left: 2vw;
@@ -159,7 +177,7 @@ const clickHot = val => {
             background-color: #fff;
             color: #6a58bc;
             white-space: nowrap;
-            
+
             margin-bottom: 2vw;
         }
     }
@@ -209,20 +227,22 @@ const clickHot = val => {
     .page-search {
 
         .hots {
-        top: -24px;
-        .name {
-            margin-bottom: 20px;
-            font-size: 24px;
-            padding-left: 20px;
+            top: -24px;
+
+            .name {
+                margin-bottom: 20px;
+                font-size: 24px;
+                padding-left: 20px;
+            }
+
+            .hot {
+                font-size: 20px;
+                margin-left: 20px;
+                padding: 6px 20px;
+                border-radius: 30px;
+                margin-bottom: 20px;
+            }
         }
-        .hot {
-            font-size: 20px;
-            margin-left: 20px;
-            padding: 6px 20px;
-            border-radius: 30px;
-            margin-bottom: 20px;
-        }
-    }
 
         /* 平板样式 */
         .title {
