@@ -47,7 +47,7 @@ const site = computed(() => store.state.config.site || {})
 const route = useRoute()
 const active = ref(false)
 const navs = ref([
-    // { name: '首页', route: 'home' },
+    { name: '首页', route: 'home' },
     { name: '影片', route: 'movies' },
     { name: '福利', route: 'gift' },
     // { name: '消息', route: 'message' },
