@@ -88,7 +88,7 @@
 
     <!-- 电影列表 -->
     <div class="maxwidth" style="margin: 0 auto;">
-      <ConList :from="'home2'" :list="new_video"  :loading="false" :finish="false" />
+      <ConList :from="'home2'" :list="new_video" :loading="false" :finish="false" />
     </div>
 
     <!-- 底部 -->
@@ -115,7 +115,23 @@ import router from "@/router";
 
 store.dispatch('updateAds', 1)
 const videos = computed(() => store.state.config.video || [])
-const new_video = computed(() => store.state.config.new_video || [])
+const new_video = computed(() => {
+
+  // 替换内部广告
+  if (innerAds.value && innerAds.value.length) {
+    store.state.config.new_video.forEach((item, i) => {
+      innerAds.value.forEach(ad => {
+        if (i + 1 == ad.weigh) {
+          store.state.config.new_video[i] = ad
+          store.state.config.new_video[i].is_ad = true
+        }
+      })
+    })
+  }
+  return store.state.config.new_video || []
+})
+
+
 const ads = computed(() => store.state.ads[1] || {})
 const rightApps = computed(() => { // 右侧广告
   if (!ads.value || !ads.value.app || !ads.value.app.length) return []
@@ -130,8 +146,8 @@ const midApps = computed(() => { // 中间广告
 })
 
 const innerAds = computed(() => { // 列表插入广告
-    if (!ads.value || !ads.value.vad || !ads.value.vad.length) return []
-    return ads.value.vad
+  if (!ads.value || !ads.value.vad || !ads.value.vad.length) return []
+  return ads.value.vad
 })
 
 const openAd = (type, item) => {
