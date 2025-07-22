@@ -1,26 +1,31 @@
 <template>
   <!-- 顶飘 -->
-  <img class="top-ad" v-show="showTop" @click="open(site.top_url)"
+  <!-- <img class="top-ad" v-show="showTop" @click="open(site.top_url)"
     style="width: 100%;position: fixed;left: 0;z-index: 9;height: auto;max-height: 120px;" v-if="site.top_image"
-    :src="site.top_image" alt="">
+    :src="site.top_image" alt=""> -->
   <!-- 头部 -->
-  <ConHeader />
+  <!-- <ConHeader /> -->
   <!-- 内容 -->
   <router-view class="page" />
   <!-- 底部 -->
   <ConBottom />
   <!-- 回到顶部 -->
-  <NBackTop :listen-to="'#app'" :bottom="'100px'" :right="'20px'">
+  <!-- <NBackTop :listen-to="'#app'" :bottom="'100px'" :right="'20px'">
     <img style="width:50px;height:50px" src="@/assets/back_top_icon.webp" alt="">
-  </NBackTop>
+  </NBackTop> -->
   <!-- 开屏广告 -->
   <ConAdPopup />
   <!-- 底飘 -->
   <div class="bb-box" v-if="site.bottom_image" @click="open(site.bottom_url)">
-    <img style="width: 100%;max-height: 120px;" :src="site.bottom_image" alt="">
-    <img
-      style="width: 100%;max-height: 120px;position: fixed;bottom: 0;left: 0;z-index: 9;height: auto;cursor: pointer;"
-      :src="site.bottom_image" alt="">
+
+    <div class="bb-box-content">
+      <div class="bb-box-item" v-for="i in 4" :key="i">
+        <img class="icon" :src="site.bottom_image" alt="">
+        <div class="name">底部广告</div>
+      </div>
+    </div>
+
+
   </div>
 
 </template>
@@ -69,18 +74,25 @@ body {
   width: 100%;
   height: 100%;
   user-select: none;
-  font-size: 5vw;
-  background-color: #e8e8e8;
+  font-size: calc(var(--vw) * 5);
+  background-color: #404040;
 }
 
 #app {
-  background-color: #e8e8e8;
-  color: #3d3d3d;
+  background-color: #404040;
+  color: #fff;
   width: 100%;
   margin: 0 auto;
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+  max-width: 800px;
+  --vw: calc(1vw);
+}
+@media (min-width: 800px) {
+  #app {
+    --vw: calc(800px / 100);
+  }
 }
 
 .maxwidth {
@@ -109,72 +121,149 @@ body {
 }
 
 .ad-texts {
+  font-size: calc(var(--vw) * 3.8);
+  padding: 0 0 calc(var(--vw) * 4) 0;
+  background-color: #000;
+  color: #fff;
+  overflow-x: auto;
+  white-space: nowrap;
+
+  .ad-text {
+    margin: 0 0 0 calc(var(--vw) * 4);
+    cursor: pointer;
+    display: inline-block;
+  }
+}
+
+.ad-block {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   flex-wrap: wrap;
-  margin: 0 auto;
-  font-size: 4vw;
-  padding: 4vw 0;
-
-  .ad-text {
-    margin: 0 2vw 1vw 0;
-    cursor: pointer;
+  background-color: #404040;
+  padding: calc(var(--vw) * 1.5) 0 calc(var(--vw) * 0.5) 0;
+  .block-item {
+    width: 24%;
+    margin-left: 1%;
+    height: calc(var(--vw) * 8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #999;
+    color: #fff;
+    margin-bottom: calc(var(--vw) * 1);
+    border-radius: calc(var(--vw) * 0.5);
+    font-size: calc(var(--vw) * 3.6);
+    &:nth-child(1) {
+      background-color: #259b0d;
+    }
+    &:nth-child(2) {
+      background-color: #b80011;
+    }
+    &:nth-child(3) {
+      background-color: #fe721e;
+    }
+    &:nth-child(4) {
+      background-color: rgb(255, 153, 159);
+    }
+    &:nth-child(5) {
+      background-color: #a028ae;
+    }
+    &:nth-child(6) {
+      background-color: #003366;
+    }
+    &:nth-child(7) {
+      background-color: #f31900;
+    }
+    &:nth-child(8) {
+      background-color: #666666;
+    }
+    &:nth-child(9) {
+      background-color: #006699;
+    }
+    &:nth-child(10) {
+      background-color: #993333;
+    }
+    &:nth-child(11) {
+      background-color: #d88569;
+    }
+    &:nth-child(12) {
+      background-color: #3e9f96;
+    }
   }
 }
+
+.class-box {
+  background-color: #000;
+  .class-con {
+    padding: calc(var(--vw) * 2) 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .class-title {
+      font-size: calc(var(--vw) * 4.2);
+      font-weight: bold;
+      padding: 0 calc(var(--vw) * 2);
+      border-right: 1px solid rgba(255,255,255,0.2);
+      white-space: nowrap;
+      color: #fff;
+    }
+    .class-items {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      .class-item {
+        flex: 1;
+        text-align: center;
+        line-height: calc(var(--vw) * 9);
+        color: #fff;
+        font-size: calc(var(--vw) * 3.8);
+        white-space: nowrap;
+        min-width: calc(var(--vw) * 20);
+        max-width: calc(var(--vw) * 30);
+        img {
+          width: calc(var(--vw) * 4);
+          height: calc(var(--vw) * 4);
+        }
+      }
+      .active-class {
+        color: #FFD700;
+      }
+    }
+  }
+}
+
+.inner-search {
+  padding: calc(var(--vw) * 2);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #fff;
+  .title {
+    color: #000;
+    font-size: calc(var(--vw) * 4);
+    font-weight: bold;
+  }
+  .ipt {
+    height: calc(var(--vw) * 8);
+    border-radius: calc(var(--vw) * 1);
+    border: 1px solid #999;
+    margin: 0 calc(var(--vw) * 2);
+    input {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  button {
+    height: calc(var(--vw) * 8);
+  }
+}
+
 .top-ad {
   top: 0;
 }
 
-/* 平板设备 (750px及以上) */
-@media (min-width: 750px) {
-
-  html,
-  body {
-    /* 平板样式 */
-    font-size: 20px;
-  }
-
-  .page {
-    min-height: 80vh;
-  }
-
-  .ad-texts {
-    font-size: 24px;
-    padding: 24px 0;
-
-    .ad-text {
-      margin: 0 20px 14px 0;
-    }
-  }
-}
-
-/* 桌面设备 (1200px及以上) */
-@media (min-width: 1200px) {
-
-  html,
-  body {
-    /* 平板样式 */
-    font-size: 20px;
-  }
-
-  .page {
-    min-height: 80vh;
-  }
-
-  .ad-texts {
-    font-size: 28px;
-    padding: 28px 0;
-
-    .ad-text {
-      margin: 0 24px 16px 0;
-    }
-  }
-
-  .top-ad {
-    top: 100px;
-  }
-}
 
 /* Firefox 兼容 */
 * {
@@ -219,5 +308,51 @@ input {
   background-color: rgba(0, 0, 0, 0);
   border: none;
   outline: none;
+}
+</style>
+
+<style lang="less" scoped>
+.bb-box {
+
+  width: 100%;
+  height: 100px;
+  background-color: #000;
+
+  .bb-box-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 100px;
+    background-color: #000;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9;
+    max-width: 800px;
+  }
+
+  .bb-box-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(var(--vw) * 3.4);
+    cursor: pointer;
+
+    .icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 4px;
+    }
+
+    .name {
+      color: Lime;
+    }
+  }
 }
 </style>

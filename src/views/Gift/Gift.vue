@@ -44,8 +44,8 @@ const openAd = (type, item) => {
     .title {
         display: block;
         margin: 0 auto;
-        height: 15vw;
-        margin-bottom: 4vw;
+        height: calc(var(--vw) * 15);
+        margin-bottom: calc(var(--vw) * 4);
     }
 
     .banner {

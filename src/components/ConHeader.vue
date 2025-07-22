@@ -107,8 +107,8 @@ const jump = name => {
             left: 0;
             top: 0;
             z-index: 99;
-            width: 12vw;
-            height: 9vw;
+            width: calc(var(--vw) * 12);
+            height: calc(var(--vw) * 9);
             cursor: pointer;
         }
 
@@ -117,96 +117,11 @@ const jump = name => {
             top: 0;
             right: 0;
             z-index: 99;
-            width: 12vw;
-            height: 9vw;
+            width: calc(var(--vw) * 12);
+            height: calc(var(--vw) * 9);
             cursor: pointer;
         }
     }
 }
 
-/* 平板设备 (750px及以上) */
-@media (min-width: 750px) {
-    .con-header {
-
-        /* 平板样式 */
-        .con-header-pc {
-            display: none;
-        }
-
-        .con-header-h5 {
-            .left-icon {
-                width: 80px;
-                height: 60px;
-            }
-
-            .right-icon {
-                width: 80px;
-                height: 60px;
-            }
-        }
-    }
-}
-
-/* 桌面设备 (1200px及以上) */
-@media (min-width: 1200px) {
-    .con-header {
-
-        /* 桌面样式 */
-        .con-header-pc {
-            display: block;
-            position: fixed;
-            width: 100%;
-            height: 100px;
-            top: 0;
-            left: 0;
-            z-index: 10;
-            background-color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 5px #eee;
-
-            .con-pc {
-                display: flex;
-                align-items: center;
-                width: 100%;
-                padding: 0 20px;
-
-                .logo {
-                    height: 68px;
-                    width: auto;
-                    cursor: pointer;
-                }
-
-                .navs {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-
-                    .nav {
-                        padding: 0 20px;
-                        margin-left: 32px;
-                        cursor: pointer;
-                    }
-
-                    .active_nav {
-                        color: #dc4891;
-                    }
-                }
-
-                .search {
-                    width: 24px;
-                    height: 24px;
-                    margin-left: 84px;
-                    cursor: pointer;
-                }
-            }
-
-        }
-
-        .con-header-h5 {
-            display: none;
-        }
-    }
-}
 </style>

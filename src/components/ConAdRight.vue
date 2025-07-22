@@ -34,36 +34,16 @@ const clickItem = item => {
     position: fixed;
     z-index: 99;
     bottom: 160px;
-    right: 20px;
+    right: 10px;
     .right-app {
-        margin-top: 1vw;
-        width: 15vw;
-        height: 15vw;
+        margin-top: calc(var(--vw) * 1);
+        width: calc(var(--vw) * 15);
+        height: calc(var(--vw) * 15);
         cursor: pointer;
+        border: 2px solid red;
+        border-radius: calc(var(--vw) * 2);
+        overflow: hidden;
     }
 }
 
-/* 平板设备 (750px及以上) */
-@media (min-width: 750px) {
-    .right-apps {
-        /* 平板样式 */
-        .right-app {
-            margin-top: 4px;
-            width: 120px;
-            height: 120px;
-        }
-    }
-}
-
-/* 桌面设备 (1200px及以上) */
-@media (min-width: 1200px) {
-    .right-apps {
-        /* 桌面样式 */
-        .right-app {
-            margin-top: 6px;
-            width: 150px;
-            height: 150px;
-        }
-    }
-}
 </style>

@@ -1,33 +1,50 @@
 <!-- 电影列表 -->
 <template>
-  <div class="maxwidth con-list">
-
-    <template v-for="(item, i) in list">
-      <div class="list-item" :class="{ 'ad-item': item.type == 'ad' }" @click="goInfo(item)">
-        <img class="pic" :src="item.image" alt="">
-        <div class="title">{{ item.title }}</div>
+  <div>
+    <!-- 广告 -->
+    <div class="list-ad-box" v-if="props.midApps.length">
+      <div @click="goAd(ad)" class="list-ad-box-item" v-for="ad in props.midApps" :key="ad.id">
+        <img class="list-ad-box-img" :src="ad.image" alt="">
+        <div class="list-ad-box-title">{{ ad.title }}</div>
+        <div class="list-ad-box-btn">立即下载 </div>
       </div>
+    </div>
+    <!-- 更多广告 -->
+    <div class="more-ads">
+      <div class="more-title">站长亲测：安全APP无毒免费下载</div>
+      <div class="more-list">
+        <div class="more-item" :class="['more-' + Math.floor(i / 4)]" v-for="i in 20" :key="i">更多推荐</div>
+      </div>
+    </div>
+    <!-- 视频列表 -->
+    <div v-if="title" class="con-list-title">{{ title }}</div>
+    <div class="maxwidth con-list">
 
-      <!-- 广告 -->
-      <div class="list-ad-box" v-if="(i > 0 && (i + 1) % 24 == 0) && props.midApps.length">
-        <div @click="goAd(ad)" class="list-ad-box-item" v-for="ad in props.midApps" :key="ad.id">
-          <img class="list-ad-box-img" :src="ad.image" alt="">
-          <div class="list-ad-box-title">{{ ad.title }}</div>
+      <template v-for="(item, i) in list">
+
+
+
+        <!-- 视频 -->
+        <div class="list-item" :class="{ 'ad-item': item.type == 'ad' }" @click="goInfo(item)">
+          <img class="pic" :src="item.image" alt="">
+          <div class="title">{{ item.title }}</div>
         </div>
-      </div>
-    </template>
 
-    <template v-if="props.onlyApp">
-      <div class="list-ad-box" v-if="props.onlyApp && props.midApps.length">
-        <div @click="goAd(ad)" class="list-ad-box-item" v-for="ad in props.midApps" :key="ad.id">
-          <img class="list-ad-box-img" :src="ad.image" alt="">
-          <div class="list-ad-box-title">{{ ad.title }}</div>
+
+      </template>
+
+      <template v-if="props.onlyApp">
+        <div class="list-ad-box" v-if="props.onlyApp && props.midApps.length">
+          <div @click="goAd(ad)" class="list-ad-box-item" v-for="ad in props.midApps" :key="ad.id">
+            <img class="list-ad-box-img" :src="ad.image" alt="">
+            <div class="list-ad-box-title">{{ ad.title }}</div>
+          </div>
         </div>
+      </template>
+
+
+      <div v-if="!props.onlyApp" class="loading_more" ref="moreRef">{{ finish ? '没有更多了' : (loading ? '加载中...' : '') }}
       </div>
-    </template>
-
-
-    <div v-if="!props.onlyApp" class="loading_more" ref="moreRef">{{ finish ? '没有更多了' : (loading ? '加载中...' : '') }}
     </div>
   </div>
 </template>
@@ -64,7 +81,11 @@ const props = defineProps({
   from: {
     type: String,
     default: ''
-  }
+  },
+  title: {
+    type: String,
+    default: ''
+  },
 })
 const emits = defineEmits(['more'])
 const goInfo = item => {
@@ -121,195 +142,192 @@ function isElementPartiallyInViewport(el) {
 </script>
 
 <style lang="less" scoped>
+@keyframes colorchange {
+  0% {
+    filter: hue-rotate(0deg)
+  }
+
+
+  100% {
+    filter: hue-rotate(-360deg)
+  }
+}
+
+@keyframes bganimation {
+  0% {
+    background-position-x: 0;
+    background-position-y: 50%;
+  }
+
+
+  100% {
+    background-position-x: 100%;
+    background-position-y: 50%;
+  }
+}
+
 /* 默认样式 - 移动优先 (小于750px) */
+.con-list-title {
+  background-color: #218868;
+  padding: 0 calc(var(--vw) * 4);
+  border-radius: calc(var(--vw) * 2);
+  line-height: calc(var(--vw) * 8);
+  margin: calc(var(--vw) * 4) calc(var(--vw) * 2) calc(var(--vw) * 2) calc(var(--vw) * 2);
+}
+
 .con-list {
   /* 移动设备样式 */
-  padding: 3vw;
+  padding: calc(var(--vw) * 3);
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
   justify-content: space-between;
 
-  .list-ad-box {
-    width: 100%;
-    display: flex;
-    align-items: stretch;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    padding: 2vw 0;
 
-    .list-ad-box-item {
-      width: 16vw;
-      cursor: pointer;
-
-      .list-ad-box-img {
-        width: 16vw;
-        height: 16vw;
-      }
-
-      .list-ad-box-title {
-        font-size: 3.5vw;
-        text-align: center;
-      }
-    }
-  }
 
   .list-item {
     cursor: pointer;
-    width: 44vw;
+    width: calc(var(--vw) * 46);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    background-color: #fff;
+    color: #333;
+    border-radius: calc(var(--vw) * 2);
+    overflow: hidden;
+    margin-bottom: calc(var(--vw) * 2);
 
     .pic {
       width: 100%;
-      height: 32vw;
+      height: calc(var(--vw) * 28);
     }
 
     .title {
-      margin: 2vw 0;
-      font-size: 3.6vw;
+      margin: calc(var(--vw) * 2) 0;
+      font-size: calc(var(--vw) * 3.6);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 calc(var(--vw) * 2);
+      width: 100%;
     }
   }
 
   .loading_more {
     text-align: center;
     width: 100%;
-    font-size: 3.2vw;
-    color: #999;
+    font-size: calc(var(--vw) * 3.2);
+    color: #ccc;
     text-align: center;
-    padding: 5vw 0;
+    padding: calc(var(--vw) * 5) 0;
   }
 }
 
-/* 平板设备 (750px及以上) */
-@media (min-width: 750px) {
-  .con-list {
-    /* 平板样式 */
-    padding: 2.5vw;
+.list-ad-box {
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: calc(var(--vw) * 2) 0;
+  background-color: #fff;
 
-    .list-ad-box {
-      padding: 24px 0;
+  .list-ad-box-item {
+    width: calc(var(--vw) * 18.3);
+    cursor: pointer;
+    text-align: center;
+    margin-bottom: calc(var(--vw) * 3);
 
-      .list-ad-box-item {
-        width: 12vw;
-
-        .list-ad-box-img {
-          width: 12vw;
-          height: 12vw;
-        }
-
-        .list-ad-box-title {
-          font-size: 24px;
-        }
-      }
+    .list-ad-box-img {
+      width: calc(var(--vw) * 16);
+      height: calc(var(--vw) * 16);
+      border-radius: calc(var(--vw) * 2);
+      overflow: hidden;
     }
 
-    .list-item {
-      width: 30vw;
-
-      .pic {
-        width: 100%;
-        height: 22vw;
-      }
-
-      .title {
-        margin: 1vw 0;
-        font-size: 22px;
-      }
+    .list-ad-box-title {
+      font-size: calc(var(--vw) * 3);
+      text-align: center;
+      font-weight: bold;
+      color: #f35626;
+      background-image: -webkit-linear-gradient(92deg, #f35626, #feab3a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      -webkit-animation: colorchange 10s infinite linear;
     }
 
-    .loading_more {
-      font-size: 16px;
-      padding: 20px 0;
-    }
-  }
-}
-
-/* 桌面设备 (1200px及以上) */
-@media (min-width: 1200px) {
-  .con-list {
-    /* 桌面样式 */
-    padding: 32px 0;
-
-    .list-ad-box {
-      padding: 24px 0;
-
-      .list-ad-box-item {
-        width: 140px;
-
-        .list-ad-box-img {
-          width: 140px;
-          height: 140px;
-        }
-
-        .list-ad-box-title {
-          font-size: 24px;
-        }
-      }
-    }
-
-    .list-item {
-      width: 290px;
-
-      .pic {
-        width: 100%;
-        height: 200px;
-      }
-
-      .title {
-        margin: 12px 0;
-        font-size: 22px;
-      }
-    }
-
-    .loading_more {
-      font-size: 18px;
-      padding: 24px 0;
+    .list-ad-box-btn {
+      height: calc(var(--vw) * 6);
+      line-height: calc(var(--vw) * 6);
+      border: 1px solid #fff;
+      border-radius: calc(var(--vw) * 6);
+      color: white;
+      background-color: #ff4ba1;
+      font-size: 12px;
+      margin-top: 5px;
+      box-shadow: rgb(5 24 74 / 37%) 0px 2px 6px 0px;
+      width: 90%;
+      margin: 0 auto;
+      background-image: linear-gradient(125deg, #e70f0f, #FF9800, #ff00f5d1, #f3e900);
+      background-size: 400%;
+      animation: bganimation 20s infinite;
     }
   }
 }
 
-@media (min-width: 1240px) {
-  .con-list {
-    /* 桌面样式 */
-    padding: 32px 0;
+.more-ads {
+  .more-title {
+    color: #ff00e3;
+    height: calc(var(--vw) * 10);
+    line-height: calc(var(--vw) * 10);
+    text-align: center;
+    font-size: calc(var(--vw) * 4);
+    background-color: #000;
+  }
 
-    .list-item {
-      width: 300px;
+  .more-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: calc(var(--vw) * 2);
+    padding-bottom: 0;
+    background-color: #fff;
 
-      .pic {
-        width: 100%;
-        height: 210px;
-      }
+    .more-item {
+      margin-bottom: calc(var(--vw) * 2);
+      width: calc(var(--vw) * 22);
+      height: calc(var(--vw) * 8);
+      border-radius: 2vw;
+      background-color: #000;
+      text-align: center;
+      line-height: calc(var(--vw) * 8);
+      color: #fff;
+      font-size: calc(var(--vw) * 3.2);
+    }
 
-      .title {
-        margin: 12px 0;
-        font-size: 22px;
-      }
+    .more-0 {
+      color: #f59e0b;
+    }
+
+    .more-2 {
+      color: #10b981;
+    }
+
+    .more-3 {
+      color: #fff900;
+    }
+
+    .more-4 {
+      color: #00c8ff;
+    }
+
+    .more-5 {
+      color: #f65cec;
     }
   }
+
 }
 
-@media (min-width: 1305px) {
-  .con-list {
-    /* 桌面样式 */
-    padding: 32px 0;
-
-    .list-item {
-      width: 320px;
-
-      .pic {
-        width: 100%;
-        height: 220px;
-      }
-
-      .title {
-        margin: 12px 0;
-        font-size: 22px;
-      }
-    }
-  }
-}
 </style>

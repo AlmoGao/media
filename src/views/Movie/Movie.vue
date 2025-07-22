@@ -1,40 +1,21 @@
 <!-- 首页 -->
 <template>
   <div class="page-movie">
-    <!-- 顶部图片 -->
+    <!-- 顶部 -->
     <div class="top">
-      <img src="@/assets/movies_page_title.webp" alt="">
+      {{ site.name }}
     </div>
 
-
-    <!-- 分类 -->
-    <div class="maxwidth cate-box">
-      <div class="cate-item" @click="changeCate(item)" :class="{ 'active-cate': activeId == item.id }"
-        v-for="item in category" :key="item.id">{{ item.name }}</div>
-    </div>
-
-    <!-- 轮播图 -->
-    <div class="banner-box" v-if="ads.carousel && ads.carousel.length" style="background-color: #3b3b3b;">
-      <!-- h5 -->
-      <NCarousel autoplay touchable draggable class="banners-h5">
-        <img style="cursor: pointer;" @click="openAd('carousel', item)" v-for="item in ads.carousel"
-          :key="'b-' + item.id" class="carousel-img" :src="item.image">
-      </NCarousel>
-
-      <!-- pc -->
-      <NCarousel autoplay effect="card" class="banners" touchable draggable
-        prev-slide-style="transform: translateX(-110%) translateZ(-200px);"
-        next-slide-style="transform: translateX(10%) translateZ(-200px);">
-        <NCarouselItem :style="{ width: '80%' }" v-for="item in ads.carousel" :key="'pb-' + item.id">
-          <img style="cursor: pointer;" class="carousel-img" @click="openAd('carousel', item)" :src="item.image">
-        </NCarouselItem>
-      </NCarousel>
-    </div>
 
     <!-- 文字 -->
     <div class="maxwidth ad-texts" v-if="ads.tad && ads.tad.length">
-      <div @click="openAd('tad', item)" class="gradient-text ad-text" v-for="item in ads.tad || []"
-        :key="'ad' + item.id">{{ item.title }}</div>
+      <div @click="openAd('tad', item)" class="ad-text" v-for="item in ads.tad || []" :key="'ad' + item.id">{{
+        item.title }}</div>
+    </div>
+
+    <!-- 板块 -->
+    <div class="ad-block">
+      <div class="block-item" v-for="i in 10" :key="i">模块广告</div>
     </div>
 
     <!-- banner -->
@@ -44,10 +25,34 @@
         :key="item.id" :src="item.image" alt="">
     </div>
 
+    <!-- 分类 -->
+    <div class="class-box">
+      <div class="class-con">
+        <div class="class-title">视频</div>
+        <div class="class-items">
+          <div class="class-item" @click="changeCate(item)" :class="{ 'active-class': activeId == item.id }"
+            v-for="item in category" :key="item.id">
+            <span>{{ item.name }}</span>
+            <img src="@/assets/hot.gif" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 搜索 -->
+    <div class="inner-search">
+      <div class="title">搜索:</div>
+      <div class="ipt">
+        <input v-model="searchStr" type="text">
+      </div>
+      <button @click="goSearch">搜索</button>
+    </div>
+
 
     <!-- 电影列表 -->
-    <ConList :from="'movies'" @more="getList" :list="list" :midApps="midApps" :loading="loading" :finish="finish"
-      style="margin: 0 auto;" />
+    <div>{{ }}</div>
+    <ConList :title="cateTitle" :from="'movies'" @more="getList" :list="list" :midApps="midApps" :loading="loading"
+      :finish="finish" style="margin: 0 auto;" />
 
 
     <!-- 右侧广告 -->
@@ -63,8 +68,10 @@ import ConList from "@/components/ConList.vue"
 import store from '@/store';
 import { computed, watch, ref } from "vue"
 import https from '@/api';
+import router from "@/router";
 store.dispatch('updateAds', 2)
 
+const site = computed(() => store.state.config.site || {})
 const category = computed(() => store.state.category || [])
 const ads = computed(() => store.state.ads[2] || {})
 const rightApps = computed(() => { // 右侧广告
@@ -131,6 +138,12 @@ const reset = () => {
   page.value = 0
   getList()
 }
+const cateTitle = computed(() => {
+  if (!category.value || !category.value.length) return ''
+  const target = category.value.find(a => a.id == activeId.value)
+  if (target) return target.name
+  return ''
+})
 const changeCate = item => {
   activeId.value = item.id
   reset()
@@ -153,6 +166,16 @@ const openAd = (type, item) => {
   })
 }
 
+
+const searchStr = ref('')
+const goSearch = () => {
+  sessionStorage.setItem('search_list', '[]')
+  sessionStorage.setItem('search_word', searchStr.value)
+  router.push({
+    name: 'search'
+  })
+}
+
 </script>
 
 <style lang="less" scoped>
@@ -164,34 +187,33 @@ const openAd = (type, item) => {
   /* 移动设备样式 */
   .top {
     width: 100%;
-    height: 12vw;
+    height: calc(var(--vw) * 12);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 4vw;
-
-    img {
-      height: 100%;
-      width: auto;
-    }
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
   }
 
   .cate-box {
     margin: 0 auto;
     white-space: nowrap;
     overflow-x: auto;
-    padding: 4vw;
+    padding: calc(var(--vw) * 4);
 
     .cate-item {
-      margin: 0 4vw 2vw 0;
+      margin: 0 calc(var(--vw) * 4) calc(var(--vw) * 2) 0;
       display: inline-block;
       cursor: pointer;
     }
 
     .active-cate {
       color: #dc4891;
-      border-radius: 2vw;
-      border-bottom: 0.5vw solid #dc4891;
+      border-radius: calc(var(--vw) * 2);
+      border-bottom: calc(var(--vw) * 0.5) solid #dc4891;
     }
   }
 
@@ -201,114 +223,14 @@ const openAd = (type, item) => {
 
   .banners-h5 {
     display: block;
-    height: 60vw;
+    height: calc(var(--vw) * 60);
 
     .carousel-img {
       width: 100%;
-      height: 60vw;
+      height: calc(var(--vw) * 60);
     }
   }
 
 }
 
-/* 平板设备 (750px及以上) */
-@media (min-width: 750px) {
-  .page-movie {
-
-    /* 平板样式 */
-    .top {
-      width: 100%;
-      height: 100px;
-      margin-bottom: 24px;
-    }
-
-    .cate-box {
-      padding: 24px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-start;
-      align-items: center;
-
-      .cate-item {
-        margin: 0 32px 24px 0;
-        font-size: 24px;
-      }
-
-      .active-cate {
-        border-radius: 8px;
-        border-bottom: 4px solid #dc4891;
-      }
-    }
-
-    .banners-h5 {
-      display: none;
-    }
-
-    .banner-box {
-      padding: 32px 0;
-    }
-
-    .banners {
-      height: 360px;
-      display: block;
-
-      .carousel-img {
-        height: 360px;
-        width: auto;
-        margin: 0 auto;
-      }
-    }
-  }
-}
-
-/* 桌面设备 (1200px及以上) */
-@media (min-width: 1200px) {
-  .page-movie {
-
-    /* 桌面样式 */
-    .top {
-      padding-top: 100px;
-      width: 100%;
-      height: 250px;
-      margin-bottom: 32px;
-    }
-
-    .cate-box {
-      padding: 32px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-start;
-      align-items: center;
-
-      .cate-item {
-        margin: 0 48px 24px 0;
-        font-size: 26px;
-      }
-
-      .active-cate {
-        border-radius: 10px;
-        border-bottom: 5px solid #dc4891;
-      }
-    }
-
-    .banners-h5 {
-      display: none;
-    }
-
-    .banner-box {
-      padding: 64px 0;
-    }
-
-    .banners {
-      height: 480px;
-      display: block;
-
-      .carousel-img {
-        height: 480px;
-        width: auto;
-        margin: 0 auto;
-      }
-    }
-  }
-}
 </style>

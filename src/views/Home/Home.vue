@@ -30,7 +30,7 @@
 
     <!-- 文字 -->
     <div class="maxwidth ad-texts" v-if="ads.tad && ads.tad.length">
-      <div @click="openAd('tad', item)" class="gradient-text ad-text" v-for="item in ads.tad || []"
+      <div @click="openAd('tad', item)" class="ad-text" v-for="item in ads.tad || []"
         :key="'ad' + item.id">{{ item.title }}</div>
     </div>
 
@@ -279,11 +279,11 @@ onBeforeUnmount(() => {
 
   .banners-h5 {
     display: block;
-    height: 60vw;
+    height: calc(var(--vw) * 60);
 
     .carousel-img {
       width: 100%;
-      height: 60vw;
+      height: calc(var(--vw) * 60);
     }
   }
 
@@ -292,20 +292,20 @@ onBeforeUnmount(() => {
 
     .movie-title {
       width: 100%;
-      height: 20vw;
+      height: calc(var(--vw) * 20);
       background-image: url('@/assets/home/index_our_movies_bg.webp');
       background-size: 100% 240%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 4vw;
+      padding: 0 calc(var(--vw) * 4);
 
       .movie-name {
-        height: 16vw;
+        height: calc(var(--vw) * 16);
       }
 
       .btn {
-        height: 6vw;
+        height: calc(var(--vw) * 6);
         cursor: pointer;
       }
     }
@@ -315,8 +315,8 @@ onBeforeUnmount(() => {
     width: 100%;
 
     .movie-item {
-      width: 40vw;
-      height: 24vw;
+      width: calc(var(--vw) * 40);
+      height: calc(var(--vw) * 24);
       cursor: pointer;
     }
   }
@@ -324,22 +324,22 @@ onBeforeUnmount(() => {
   .coop {
     .coop-title {
       width: 100%;
-      height: 24vw;
+      height: calc(var(--vw) * 24);
       background-image: url('@/assets/home/app_partner_bg.webp');
       background-size: 100% 240%;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      padding: 0 4vw;
+      padding: 0 calc(var(--vw) * 4);
 
       .coop-name {
-        height: 10vw;
-        margin-bottom: 2vw;
+        height: calc(var(--vw) * 10);
+        margin-bottom: calc(var(--vw) * 2);
       }
 
       .btn {
-        height: 6vw;
+        height: calc(var(--vw) * 6);
         cursor: pointer;
       }
     }
@@ -350,7 +350,7 @@ onBeforeUnmount(() => {
 
       &::after {
         content: "";
-        width: 4vw;
+        width: calc(var(--vw) * 4);
         height: 100%;
         position: absolute;
         top: 0;
@@ -360,7 +360,7 @@ onBeforeUnmount(() => {
 
       &::before {
         content: "";
-        width: 4vw;
+        width: calc(var(--vw) * 4);
         height: 100%;
         position: absolute;
         top: 0;
@@ -381,8 +381,8 @@ onBeforeUnmount(() => {
 
       .coop-item {
         display: inline-block;
-        width: 18vw;
-        height: 18vw;
+        width: calc(var(--vw) * 18);
+        height: calc(var(--vw) * 18);
         margin-right: 8px;
         cursor: pointer;
       }
@@ -429,7 +429,7 @@ onBeforeUnmount(() => {
 
     .banners {
       .banner {
-        height: 30vw;
+        height: calc(var(--vw) * 30);
       }
     }
 
@@ -475,8 +475,8 @@ onBeforeUnmount(() => {
         }
 
         .coop-item {
-          width: 12vw;
-          height: 12vw;
+          width: calc(var(--vw) * 12);
+          height: calc(var(--vw) * 12);
           margin-right: 8px;
         }
       }

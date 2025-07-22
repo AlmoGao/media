@@ -1,21 +1,64 @@
 <!-- 详情页 -->
 <template>
     <div class="page-info">
-        <div class="h5_title">{{ video.title }}</div>
+        
+
+        <!-- 顶部 -->
+        <div class="top">
+            {{ site.name }}
+        </div>
+
+
+        <!-- 文字 -->
+        <div class="maxwidth ad-texts" v-if="ads.tad && ads.tad.length">
+            <div @click="openAd('tad', item)" class="ad-text" v-for="item in ads.tad || []" :key="'ad' + item.id">{{
+                item.title }}</div>
+        </div>
+
+        <!-- 板块 -->
+        <div class="ad-block">
+            <div class="block-item" v-for="i in 10" :key="i">模块广告</div>
+        </div>
+
+        <!-- banner -->
+        <div v-if="ads.banner && ads.banner.length" class="maxwidth" style="margin: 0 auto">
+            <img @click="openAd('banner', item)"
+                style="width:100%;height:auto;display: block;cursor: pointer;max-height: 120px;"
+                v-for="item in ads.banner" :key="item.id" :src="item.image" alt="">
+        </div>
+
+        <!-- 分类 -->
+        <div class="class-box">
+            <div class="class-con">
+                <div class="class-title">视频</div>
+                <div class="class-items">
+                    <div class="class-item" @click="changeCate(item)" :class="{ 'active-class': activeId == item.id }"
+                        v-for="item in category" :key="item.id">
+                        <span>{{ item.name }}</span>
+                        <img src="@/assets/hot.gif" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
         <!-- 合作 -->
         <div>
-            <ConList :midApps="midApps" :onlyApp="true"  :loading="false" :finish="true" />
+            <ConList :midApps="midApps" :onlyApp="true" :loading="false" :finish="true" />
         </div>
 
         <div class="video-box" :style="{ backgroundImage: instance ? '' : `url(${video.image})` }">
 
-            <div v-if="timeout" style="position: absolute;z-index: 100;top: 5%;right: 5%;color: #fff;font-size: 20px;border-radius: 20px;background-color: rgba(0,0,0,0.5);padding: 2px 12px;pointer-events: none;" >{{ timeout }}s</div>
+            <div v-if="timeout"
+                style="position: absolute;z-index: 100;top: 5%;right: 5%;color: #fff;font-size: 20px;border-radius: 20px;background-color: rgba(0,0,0,0.5);padding: 2px 12px;pointer-events: none;">
+                {{ timeout }}s</div>
 
-            <img @click="openAd('vad', vad)" v-if="timeout" style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;z-index: 99;cursor: pointer;" :src="vad.image" alt="">
+            <img @click="openAd('vad', vad)" v-if="timeout"
+                style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;z-index: 99;cursor: pointer;"
+                :src="vad.image" alt="">
             <div class="video" id="video" ref="videoRef" style="width: 100%;height: 100%;"></div>
         </div>
+        <div class="h5_title">{{ video.title }}</div>
         <div style="background-color: #000;">
             <div class="maxwidth video-info">
                 <span>观看次数：{{ video.views }}</span>
@@ -29,7 +72,7 @@
         </div>
 
         <!-- 电影列表 -->
-        <ConList :from="video.from" :list="list"  :midApps="midApps" :loading="false" :finish="false"
+        <ConList :title="'为您推荐'" :from="video.from" :list="list" :midApps="midApps" :loading="false" :finish="false"
             style="margin: 0 auto;" />
 
         <!-- 右侧广告 -->
@@ -46,6 +89,8 @@ import { computed, onMounted, onBeforeUnmount, ref } from "vue"
 import Artplayer from "artplayer";
 
 store.dispatch('updateAds', 6)
+const site = computed(() => store.state.config.site || {})
+const category = computed(() => store.state.category || [])
 const ads = computed(() => store.state.ads[6] || {})
 const video = computed(() => store.state.video || {})
 if (!video.value.m3u8) {
@@ -104,7 +149,7 @@ let interval = null
 onMounted(() => {
     if (vad.value.image) {
         interval = setInterval(() => {
-            timeout.value --;
+            timeout.value--;
             if (timeout.value <= 0) {
                 clearInterval(interval);
                 initPlayer()
@@ -118,6 +163,13 @@ onBeforeUnmount(() => {
     if (interval) clearInterval(interval);
     instance.value && instance.value.destroy(false)
 })
+
+const changeCate = item => {
+    sessionStorage.setItem('movie_activeId', item.id)
+    router.replace({
+        name: 'movies',
+    })
+}
 
 function playM3u8(video, url, art) {
     if (Hls.isSupported()) {
@@ -170,10 +222,22 @@ switch (video.value.from) {
 /* 默认样式 - 移动优先 (小于750px) */
 .page-info {
 
+    .top {
+    width: 100%;
+    height: calc(var(--vw) * 12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #218868;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
     /* 移动设备样式 */
     .video-box {
         width: 100%;
-        height: 60vw;
+        height: calc(var(--vw) * 60);
         background-color: #000;
         position: relative;
         background-size: cover;
@@ -184,10 +248,10 @@ switch (video.value.from) {
     .h5_title {
         white-space: nowrap;
         background-color: #000;
-        font-size: 4vw;
-        height: 8vw;
-        line-height: 8vw;
-        padding: 0 15vw;
+        font-size: calc(var(--vw) * 4);
+        height: calc(var(--vw) * 8);
+        line-height: calc(var(--vw) * 8);
+        padding: 0 calc(var(--vw) * 2);
         overflow: hidden;
         text-overflow: ellipsis;
         color: #fff;
@@ -196,10 +260,10 @@ switch (video.value.from) {
     .video-info {
         white-space: nowrap;
         background-color: #000;
-        font-size: 3.2vw;
-        height: 6vw;
-        line-height: 6vw;
-        padding: 0 2vw;
+        font-size: calc(var(--vw) * 3.2);
+        height: calc(var(--vw) * 6);
+        line-height: calc(var(--vw) * 6);
+        padding: 0 calc(var(--vw) * 2);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -208,44 +272,4 @@ switch (video.value.from) {
     }
 }
 
-/* 平板设备 (750px及以上) */
-@media (min-width: 750px) {
-    .page-info {
-
-        /* 平板样式 */
-        .video-box {
-            height: 50vw;
-        }
-
-        .h5_title {
-            font-size: 24px;
-            height: 80px;
-            line-height: 80px;
-            padding: 0 120px;
-        }
-
-        .video-info {
-            font-size: 18px;
-            height: 40px;
-            line-height: 40px;
-            padding: 0 32px;
-        }
-    }
-}
-
-/* 桌面设备 (1200px及以上) */
-@media (min-width: 1200px) {
-    .page-info {
-
-        /* 桌面样式 */
-        .video-box {
-            height: 700px;
-            background-size: contain;
-        }
-
-        .h5_title {
-            height: 101px;
-        }
-    }
-}
 </style>

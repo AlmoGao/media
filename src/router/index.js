@@ -1,13 +1,13 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Home from '../views/Home/Home.vue'
+// import Home from '../views/Home/Home.vue'
 import Movie from '../views/Movie/Movie.vue'
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    // redirect: '/movies'
-    component: Home,
+    redirect: '/movies'
+    // component: Home,
   },
   {
     path: '/movies',
