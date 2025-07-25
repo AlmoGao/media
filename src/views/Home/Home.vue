@@ -29,15 +29,15 @@
     </div>
 
     <!-- 文字 -->
-    <div class="maxwidth ad-texts" v-if="ads.tad && ads.tad.length">
-      <div @click="openAd('tad', item)" class="ad-text" v-for="item in ads.tad || []"
+    <div class="maxwidth ad-texts" v-if="top_tad && top_tad.length">
+      <div @click="openAd('top_tad', item)" class="ad-text" v-for="item in top_tad || []"
         :key="'ad' + item.id">{{ item.title }}</div>
     </div>
 
     <!-- banner -->
-    <div v-if="ads.banner && ads.banner.length" class="maxwidth" style="margin: 0 auto">
+    <div v-if="banner && banner.length" class="maxwidth" style="margin: 0 auto">
       <img @click="openAd('banner', item)" style="width:100%;height:auto;display: block;cursor: pointer;"
-        v-for="item in ads.banner" :key="item.id" :src="item.image" alt="">
+        v-for="item in banner" :key="item.id" :src="item.image" alt="">
     </div>
 
     <!-- 电影 -->
@@ -100,7 +100,7 @@
 
 
     <!-- 右侧广告 -->
-    <ConAdRight :list="rightApps" v-if="rightApps.length" />
+    <ConAdRight :list="rightApps"  />
   </div>
 </template>
 
@@ -115,6 +115,8 @@ import router from "@/router";
 
 store.dispatch('updateAds', 1)
 const videos = computed(() => store.state.config.video || [])
+const banner = computed(() => store.state.config?.banner || [])
+const top_tad = computed(() => store.state.config?.top_tad || [])
 const new_video = computed(() => {
 
   // 替换内部广告

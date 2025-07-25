@@ -27,8 +27,8 @@
 
 
         <!-- 文字 -->
-        <div class="maxwidth ad-texts" v-if="ads.tad && ads.tad.length">
-            <div @click="openAd('tad', item)" class="ad-text" v-for="item in ads.tad || []"
+        <div class="maxwidth ad-texts" v-if="top_tad && top_tad.length">
+            <div @click="openAd('top_tad', item)" class="ad-text" v-for="item in top_tad || []"
                 :key="'ad' + item.id">{{ item.title }}</div>
         </div>
 
@@ -44,7 +44,7 @@
         </div>
 
         <!-- 右侧广告 -->
-        <ConAdRight :list="rightApps" v-if="rightApps.length" />
+        <ConAdRight :list="rightApps"  />
     </div>
 </template>
 
@@ -62,6 +62,7 @@ import store from "@/store";
 
 store.dispatch('updateAds', 7)
 const ads = computed(() => store.state.ads[7] || {})
+const top_tad = computed(() => store.state.config?.top_tad || [])
 const rightApps = computed(() => { // 右侧广告
     if (!ads.value || !ads.value.app || !ads.value.app.length) return []
     return ads.value.app.filter(item => item.flag == 1) || []

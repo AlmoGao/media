@@ -1,7 +1,7 @@
 <!-- 右侧悬浮广告 -->
 <template>
-    <div class="right-apps">
-        <div @click="clickItem(item)" class="right-app" v-for="item in props.list" :key="'ra' + item.id">
+    <div class="right-apps" v-if="right_app && right_app.length">
+        <div @click="clickItem(item)" class="right-app" v-for="item in right_app" :key="'ra' + item.id">
             <img :src="item.image" style="width: 100%;height: 100%;" alt="">
         </div>
     </div>
@@ -10,7 +10,9 @@
 
 <script setup>
 import store from '@/store'
+import { computed } from "vue"
 
+const right_app = computed(() => store.state.config?.right_app || [])
 const props = defineProps({
     list: {
         type: Array,
@@ -33,7 +35,7 @@ const clickItem = item => {
     /* 移动设备样式 */
     position: fixed;
     z-index: 99;
-    bottom: 160px;
+    bottom: 120px;
     right: 10px;
     .right-app {
         margin-top: calc(var(--vw) * 1);

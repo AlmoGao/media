@@ -8,20 +8,20 @@
 
 
     <!-- 文字 -->
-    <div class="maxwidth ad-texts" v-if="ads.tad && ads.tad.length">
-      <div @click="openAd('tad', item)" class="ad-text" v-for="item in ads.tad || []" :key="'ad' + item.id">{{
+    <div class="maxwidth ad-texts" v-if="top_tad && top_tad.length">
+      <div @click="openAd('tad', item)" class="ad-text" v-for="item in top_tad || []" :key="'ad' + item.id">{{
         item.title }}</div>
     </div>
 
     <!-- 板块 -->
-    <div class="ad-block">
-      <div class="block-item" v-for="i in 10" :key="i">模块广告</div>
+    <div class="ad-block" v-if="banner_on_tad && banner_on_tad.length">
+      <div class="block-item" @click="openAd('banner_on_tad', item)" v-for="(item, i) in banner_on_tad" :key="i">{{ item.title }}</div>
     </div>
 
     <!-- banner -->
-    <div v-if="ads.banner && ads.banner.length" class="maxwidth" style="margin: 0 auto">
+    <div v-if="banner && banner.length" class="maxwidth" style="margin: 0 auto">
       <img @click="openAd('banner', item)"
-        style="width:100%;height:auto;display: block;cursor: pointer;max-height: 120px;" v-for="item in ads.banner"
+        style="width:100%;height:auto;display: block;cursor: pointer;max-height: 120px;" v-for="item in banner"
         :key="item.id" :src="item.image" alt="">
     </div>
 
@@ -50,13 +50,12 @@
 
 
     <!-- 电影列表 -->
-    <div>{{ }}</div>
     <ConList :title="keyWord + '搜索结果'" :from="'movies'" @more="getList" :list="list" :midApps="midApps" :loading="loading"
       :finish="finish" style="margin: 0 auto;" />
 
 
     <!-- 右侧广告 -->
-    <ConAdRight :list="rightApps" v-if="rightApps.length" />
+    <ConAdRight :list="rightApps"  />
   </div>
 </template>
 
@@ -72,6 +71,9 @@ import router from "@/router";
 store.dispatch('updateAds', 7)
 
 const site = computed(() => store.state.config.site || {})
+const top_tad = computed(() => store.state.config?.top_tad || [])
+const banner_on_tad = computed(() => store.state.config?.banner_on_tad || [])
+const banner = computed(() => store.state.config?.banner || [])
 const category = computed(() => store.state.category || [])
 const ads = computed(() => store.state.ads[7] || {})
 const rightApps = computed(() => { // 右侧广告

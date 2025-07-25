@@ -2,8 +2,8 @@
 <template>
   <div>
     <!-- 广告 -->
-    <div class="list-ad-box" v-if="props.midApps.length">
-      <div @click="goAd(ad)" class="list-ad-box-item" v-for="ad in props.midApps" :key="ad.id">
+    <div class="list-ad-box" v-if="app && app.length">
+      <div @click="goAd(ad)" class="list-ad-box-item" v-for="ad in app" :key="ad.id">
         <img class="list-ad-box-img" :src="ad.image" alt="">
         <div class="list-ad-box-title">{{ ad.title }}</div>
         <div class="list-ad-box-btn">立即下载 </div>
@@ -13,7 +13,7 @@
     <div class="more-ads">
       <div class="more-title">站长亲测：安全APP无毒免费下载</div>
       <div class="more-list">
-        <div class="more-item" :class="['more-' + Math.floor(i / 4)]" v-for="i in 20" :key="i">更多推荐</div>
+        <div class="more-item" @click="goAd(item)" :class="['more-' + Math.floor(i / 4)]" v-for="(item, i) in video_on_tad" :key="i">{{ item.title }}</div>
       </div>
     </div>
     <!-- 视频列表 -->
@@ -50,9 +50,10 @@
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount, ref } from "vue"
+import { onMounted, onBeforeUnmount, ref, computed } from "vue"
 import store from "@/store"
 
+const app = computed(() => store.state.config?.app || [])
 const props = defineProps({
   list: {
     type: Array,
@@ -87,6 +88,7 @@ const props = defineProps({
     default: ''
   },
 })
+const video_on_tad = computed(() => store.state.config?.video_on_tad || [])
 const emits = defineEmits(['more'])
 const goInfo = item => {
   if (item.is_ad) { // 广告

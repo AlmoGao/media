@@ -10,7 +10,7 @@
         </div>
 
         <!-- 右侧广告 -->
-        <ConAdRight :list="rightApps" v-if="rightApps.length" />
+        <ConAdRight :list="rightApps"  />
     </div>
 </template>
 

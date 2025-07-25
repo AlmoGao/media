@@ -1,8 +1,8 @@
 <template>
   <!-- 顶飘 -->
-  <!-- <img class="top-ad" v-show="showTop" @click="open(site.top_url)"
+  <img class="top-ad" v-show="showTop" @click="open(site.top_url)"
     style="width: 100%;position: fixed;left: 0;z-index: 9;height: auto;max-height: 120px;" v-if="site.top_image"
-    :src="site.top_image" alt=""> -->
+    :src="site.top_image" alt="">
   <!-- 头部 -->
   <!-- <ConHeader /> -->
   <!-- 内容 -->
@@ -16,12 +16,12 @@
   <!-- 开屏广告 -->
   <ConAdPopup />
   <!-- 底飘 -->
-  <div class="bb-box" v-if="site.bottom_image" @click="open(site.bottom_url)">
+  <div class="bb-box" v-if="bottom_app && bottom_app.length" >
 
     <div class="bb-box-content">
-      <div class="bb-box-item" v-for="i in 4" :key="i">
-        <img class="icon" :src="site.bottom_image" alt="">
-        <div class="name">底部广告</div>
+      <div class="bb-box-item" @click="open(item.url)" v-for="(item, i) in bottom_app" :key="i">
+        <img class="icon" :src="item.image" alt="">
+        <div class="name">{{ item.title }}</div>
       </div>
     </div>
 
@@ -43,6 +43,7 @@ import store from "./store"
 import { useRoute } from "vue-router"
 
 const route = useRoute()
+const bottom_app = computed(() => store.state.config?.bottom_app || [])
 const { message } = createDiscreteApi(["message"])
 const site = computed(() => store.state.config.site || {})
 if (site.value.name) {
@@ -218,13 +219,19 @@ body {
         text-align: center;
         line-height: calc(var(--vw) * 9);
         color: #fff;
-        font-size: calc(var(--vw) * 3.8);
+        font-size: calc(var(--vw) * 3.2);
         white-space: nowrap;
         min-width: calc(var(--vw) * 20);
         max-width: calc(var(--vw) * 30);
         img {
-          width: calc(var(--vw) * 4);
-          height: calc(var(--vw) * 4);
+          width: calc(var(--vw) * 3.4);
+          height: calc(var(--vw) * 3.4);
+          display: none;
+        }
+      }
+      .hot-item {
+        img {
+          display: inline-block;
         }
       }
       .active-class {
