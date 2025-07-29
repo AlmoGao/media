@@ -214,8 +214,8 @@ body {
       align-items: center;
       justify-content: flex-start;
       flex-wrap: wrap;
+      flex: 1;
       .class-item {
-        flex: 1;
         text-align: center;
         line-height: calc(var(--vw) * 9);
         color: #fff;
@@ -223,6 +223,7 @@ body {
         white-space: nowrap;
         min-width: calc(var(--vw) * 20);
         max-width: calc(var(--vw) * 30);
+        width: 25%;
         img {
           width: calc(var(--vw) * 3.4);
           height: calc(var(--vw) * 3.4);

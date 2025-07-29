@@ -17,6 +17,19 @@ export default createStore({
     category: [],
 
     video: {}, // 视频
+
+    cateClass: [
+      { id: 49, name: '服务', list: [] },
+      { id: 48, name: '网红', list: [] },
+      { id: 47, name: '伊人', list: [] },
+      { id: 46, name: '稀缺', list: [] },
+      { id: 45, name: '女神', list: [] },
+      { id: 44, name: '直播', list: [] },
+      { id: 43, name: '推荐', list: [] },
+      { id: 42, name: '最热', list: [] },
+      { id: 41, name: '约炮', list: [] },
+      { id: 40, name: '月榜', list: [] },
+    ]
   },
   mutations: {
     openad(state, val) { // 打开广告
@@ -38,6 +51,27 @@ export default createStore({
     },
     setConfig(state, val) {
       state.config = val
+      // 处理分类推荐
+      const arr = [
+        { id: 49, name: '服务', list: [] },
+        { id: 48, name: '网红', list: [] },
+        { id: 47, name: '伊人', list: [] },
+        { id: 46, name: '稀缺', list: [] },
+        { id: 45, name: '女神', list: [] },
+        { id: 44, name: '直播', list: [] },
+        { id: 43, name: '推荐', list: [] },
+        { id: 42, name: '最热', list: [] },
+        { id: 41, name: '约炮', list: [] },
+        { id: 40, name: '月榜', list: [] },
+      ];
+      (val.class_tad || []).forEach(item => {
+        arr.forEach(c => {
+          if (item.category_id == c.id) {
+            c.list.push(item)
+          }
+        })
+      })
+      state.cateClass = arr
     },
     setAds(state, { key, val }) {
       state.ads[key] = val || {}

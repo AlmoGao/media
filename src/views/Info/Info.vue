@@ -24,17 +24,40 @@
         <!-- banner -->
         <div v-if="banner && banner.length" class="maxwidth" style="margin: 0 auto">
             <img @click="openAd('banner', item)"
-                style="width:100%;height:auto;display: block;cursor: pointer;max-height: 120px;"
-                v-for="item in banner" :key="item.id" :src="item.image" alt="">
+                style="width:100%;height:auto;display: block;cursor: pointer;max-height: 120px;" v-for="item in banner"
+                :key="item.id" :src="item.image" alt="">
         </div>
 
         <!-- 分类 -->
         <div class="class-box">
+            <div class="class-con" v-for="c in cateClass" :key="c.id"
+                :style="{ padding: (!c.list || !c.list.length) ? '0' : '' }">
+                <div class="class-title" v-if="c.list && c.list.length">{{ c.name }}</div>
+                <div class="class-items" v-if="c.list && c.list.length">
+                    <div class="class-item" @click="openAd('cate', item)" v-for="item in c.list.slice(0, 8)"
+                        :key="item.id">
+                        <span>{{ item.title }}</span>
+                        <img src="@/assets/hot.gif" alt="">
+                    </div>
+                </div>
+            </div>
             <div class="class-con">
                 <div class="class-title">视频</div>
                 <div class="class-items">
-                    <div class="class-item" @click="changeCate(item)" :class="{ 'active-class': activeId == item.id }"
-                        v-for="item in category" :key="item.id">
+                    <div class="class-item hot-item" @click="changeCate(item)"
+                        :class="{ 'active-class': activeId == item.id }" v-for="item in category.slice(0, 8)"
+                        :key="item.id">
+                        <span>{{ item.name }}</span>
+                        <img src="@/assets/hot.gif" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="class-con">
+                <div class="class-title">电影</div>
+                <div class="class-items">
+                    <div class="class-item hot-item" @click="changeCate(item)"
+                        :class="{ 'active-class': activeId == item.id }" v-for="item in category.slice(8, 16)"
+                        :key="item.id">
                         <span>{{ item.name }}</span>
                         <img src="@/assets/hot.gif" alt="">
                     </div>
@@ -91,6 +114,7 @@ import Artplayer from "artplayer";
 
 store.dispatch('updateAds', 6)
 const site = computed(() => store.state.config.site || {})
+const cateClass = computed(() => store.state.cateClass || [])
 const top_tad = computed(() => store.state.config?.top_tad || [])
 const banner_on_tad = computed(() => store.state.config?.banner_on_tad || [])
 const banner = computed(() => store.state.config?.banner || [])

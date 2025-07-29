@@ -15,7 +15,8 @@
 
     <!-- 板块 -->
     <div class="ad-block" v-if="banner_on_tad && banner_on_tad.length">
-      <div class="block-item" @click="openAd('banner_on_tad', item)" v-for="(item, i) in banner_on_tad" :key="i">{{ item.title }}</div>
+      <div class="block-item" @click="openAd('banner_on_tad', item)" v-for="(item, i) in banner_on_tad" :key="i">{{
+        item.title }}</div>
     </div>
 
     <!-- banner -->
@@ -27,11 +28,31 @@
 
     <!-- 分类 -->
     <div class="class-box">
+      <div class="class-con" v-for="c in cateClass" :key="c.id"
+        :style="{ padding: (!c.list || !c.list.length) ? '0' : '' }">
+        <div class="class-title" v-if="c.list && c.list.length">{{ c.name }}</div>
+        <div class="class-items" v-if="c.list && c.list.length">
+          <div class="class-item" @click="openAd('cate', item)" v-for="item in c.list.slice(0, 8)" :key="item.id">
+            <span>{{ item.title }}</span>
+            <img src="@/assets/hot.gif" alt="">
+          </div>
+        </div>
+      </div>
       <div class="class-con">
         <div class="class-title">视频</div>
         <div class="class-items">
-          <div class="class-item" @click="changeCate(item)" :class="{ 'active-class': activeId == item.id }"
-            v-for="item in category" :key="item.id">
+          <div class="class-item hot-item" @click="changeCate(item)" :class="{ 'active-class': activeId == item.id }"
+            v-for="item in category.slice(0, 8)" :key="item.id">
+            <span>{{ item.name }}</span>
+            <img src="@/assets/hot.gif" alt="">
+          </div>
+        </div>
+      </div>
+      <div class="class-con">
+        <div class="class-title">电影</div>
+        <div class="class-items">
+          <div class="class-item hot-item" @click="changeCate(item)" :class="{ 'active-class': activeId == item.id }"
+            v-for="item in category.slice(8, 16)" :key="item.id">
             <span>{{ item.name }}</span>
             <img src="@/assets/hot.gif" alt="">
           </div>
@@ -50,12 +71,12 @@
 
 
     <!-- 电影列表 -->
-    <ConList :title="keyWord + '搜索结果'" :from="'movies'" @more="getList" :list="list" :midApps="midApps" :loading="loading"
-      :finish="finish" style="margin: 0 auto;" />
+    <ConList :title="keyWord + '搜索结果'" :from="'movies'" @more="getList" :list="list" :midApps="midApps"
+      :loading="loading" :finish="finish" style="margin: 0 auto;" />
 
 
     <!-- 右侧广告 -->
-    <ConAdRight :list="rightApps"  />
+    <ConAdRight :list="rightApps" />
   </div>
 </template>
 
@@ -71,6 +92,7 @@ import router from "@/router";
 store.dispatch('updateAds', 7)
 
 const site = computed(() => store.state.config.site || {})
+const cateClass = computed(() => store.state.cateClass || [])
 const top_tad = computed(() => store.state.config?.top_tad || [])
 const banner_on_tad = computed(() => store.state.config?.banner_on_tad || [])
 const banner = computed(() => store.state.config?.banner || [])
@@ -102,56 +124,56 @@ const page = ref(sessionStorage.getItem('search_page') || 0)
 const finish = ref(false)
 const list = ref([])
 try {
-    list.value = JSON.parse(sessionStorage.getItem('search_list') || '[]')
+  list.value = JSON.parse(sessionStorage.getItem('search_list') || '[]')
 } catch {
-    list.value = []
+  list.value = []
 }
 
 const getList = () => {
-    if (loading.value || finish.value || keyWord.value === '') return
-    loading.value = true
-    page.value++
-    const word = keyWord.value
-    https.search_video(keyWord.value || '', page.value).then(res => {
-        if (word !== keyWord.value) return
-        if (!res || !res.length) return finish.value = true
-        // 替换内部广告
-        if (innerAds.value && innerAds.value.length) {
-            res.forEach((item, i) => {
-                innerAds.value.forEach(ad => {
-                    if (i + 1 == ad.weigh) {
-                        res[i] = ad
-                        res[i].is_ad = true
-                    }
-                })
-            })
-        }
-        list.value.push(...res)
+  if (loading.value || finish.value || keyWord.value === '') return
+  loading.value = true
+  page.value++
+  const word = keyWord.value
+  https.search_video(keyWord.value || '', page.value).then(res => {
+    if (word !== keyWord.value) return
+    if (!res || !res.length) return finish.value = true
+    // 替换内部广告
+    if (innerAds.value && innerAds.value.length) {
+      res.forEach((item, i) => {
+        innerAds.value.forEach(ad => {
+          if (i + 1 == ad.weigh) {
+            res[i] = ad
+            res[i].is_ad = true
+          }
+        })
+      })
+    }
+    list.value.push(...res)
 
-        sessionStorage.setItem('search_page', page.value)
-        sessionStorage.setItem('search_word', keyWord.value)
-        sessionStorage.setItem('search_list', JSON.stringify(list.value))
+    sessionStorage.setItem('search_page', page.value)
+    sessionStorage.setItem('search_word', keyWord.value)
+    sessionStorage.setItem('search_list', JSON.stringify(list.value))
 
-    }).finally(() => {
-        if (word !== keyWord.value) return
-        loading.value = false
-    })
+  }).finally(() => {
+    if (word !== keyWord.value) return
+    loading.value = false
+  })
 }
 const reset = () => {
-    loading.value = false
-    finish.value = false
-    list.value = []
-    page.value = 0
-    getList()
+  loading.value = false
+  finish.value = false
+  list.value = []
+  page.value = 0
+  getList()
 }
 const searchStr = ref(sessionStorage.getItem('search_word') || '')
 const goSearch = () => {
-    keyWord.value = searchStr.value
-    reset()
+  keyWord.value = searchStr.value
+  reset()
 }
 
 if (!list.value.length) {
-    reset()
+  reset()
 }
 
 
@@ -163,10 +185,10 @@ const openAd = (type, item) => {
 }
 
 const changeCate = item => {
-    sessionStorage.setItem('movie_activeId', item.id)
-    router.replace({
-        name: 'movies',
-    })
+  sessionStorage.setItem('movie_activeId', item.id)
+  router.replace({
+    name: 'movies',
+  })
 }
 
 </script>
@@ -175,14 +197,15 @@ const changeCate = item => {
 /* 默认样式 - 移动优先 (小于750px) */
 .page-movie {
 
-    :deep(.ad-texts) {
-        background-color: #218868;
-    }
-    :deep(.class-box) {
-        background-color: #218868;
-    }
+  :deep(.ad-texts) {
+    background-color: #218868;
+  }
 
-//   移动设备样式
+  :deep(.class-box) {
+    background-color: #218868;
+  }
+
+  //   移动设备样式
   .top {
     width: 100%;
     height: calc(var(--vw) * 12);
@@ -230,5 +253,4 @@ const changeCate = item => {
   }
 
 }
-
 </style>

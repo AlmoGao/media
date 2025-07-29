@@ -179,7 +179,7 @@ function isElementPartiallyInViewport(el) {
 
 .con-list {
   /* 移动设备样式 */
-  padding: calc(var(--vw) * 3);
+  padding: calc(var(--vw) * 2);
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
