@@ -10,13 +10,13 @@ class HttpService {
   }
   index() {
     // 首页
-    return http("/api/index/index?site_id=1", {
+    return http("/api/index/index?site_id=2", {
       method: "get",
     });
   }
   indexAd(cid) {
     // 广告
-    return http("/api/index/ad?site_id=1&cid=" + cid, {
+    return http("/api/index/ad?site_id=2&cid=" + cid, {
       method: "get",
     });
   }
